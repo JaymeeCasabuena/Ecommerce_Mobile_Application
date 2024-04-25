@@ -60,8 +60,9 @@ export default function App() {
             headerTintColor: "white",
             headerTitleStyle: {
               textTransform: "uppercase",
-              fontFamily: "Lato-Regular",
+              fontFamily: "Lato-Bold",
               fontSize: 16,
+              letterSpacing: 1,
             },
           }}
         />
