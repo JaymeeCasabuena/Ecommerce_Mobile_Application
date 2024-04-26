@@ -13,9 +13,14 @@ import { TabView, SceneMap } from "react-native-tab-view";
 import { noTabBar, renderTabBar } from "../components/TabBar";
 import getPreviewProducts from "../services/PreviewService";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Home() {
   const previewProducts = getPreviewProducts();
+  const navigation = useNavigation();
+  const goToCategoryScreen = (category) => {
+    navigation.navigate("Categories", category);
+  };
 
   const getProductsByCategory = () => {
     const categoryGroup = {};
@@ -39,7 +44,6 @@ export default function Home() {
           <FlatList
             style={styles.scrollView}
             data={categoryGroup[category]}
-            // contentContainerStyle={{ alignItems: "center" }}
             keyExtractor={(item, itemIndex) => `tab-${index}-${itemIndex}`}
             renderItem={({ item }) => (
               <View style={styles.productContainer}>
@@ -52,7 +56,7 @@ export default function Home() {
             )}
           />
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.tabButton}>
+            <TouchableOpacity onPress={() => goToCategoryScreen(category)} style={styles.tabButton}>
               <Text
                 style={styles.buttonText}
               >{`Explore More in ${category}`}</Text>
@@ -148,7 +152,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.Gray,
+    backgroundColor: Colors.GrayishWhite,
   },
   scrollView: {
     marginTop: 10,
@@ -162,6 +166,7 @@ const styles = StyleSheet.create({
     height: 320,
     backgroundColor: "white",
     borderRadius: 6,
+    elevation: 5,
   },
   productImage: {
     width: 350,

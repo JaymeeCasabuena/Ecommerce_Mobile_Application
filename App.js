@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Home from "./src/screens/Home";
 import Categories from "./src/screens/Categories";
+import ProductDetails from "./src/screens/ProductDetail";
 import { useFonts } from "expo-font";
 import { useCallback } from "react";
 import { Colors } from "./src/constants/Colors";
@@ -39,9 +40,22 @@ export default function App() {
     <NavigationContainer>
       <Drawer.Navigator
         initialRouteName="Home"
-        screenOptions={({navigation}) => ({
-          headerLeft: props => <CustomNavIcon onPress={navigation.toggleDrawer} iconName={'menu'} color={Colors.Peach} size={30}/>,
-          headerRight: props => <CustomNavIcon iconName={'shopping-bag'} color={Colors.Peach} size={30}/>,
+        screenOptions={({ navigation }) => ({
+          headerLeft: (props) => (
+            <CustomNavIcon
+              onPress={navigation.toggleDrawer}
+              iconName={"menu"}
+              color={Colors.Peach}
+              size={30}
+            />
+          ),
+          headerRight: (props) => (
+            <CustomNavIcon
+              iconName={"shopping-bag"}
+              color={Colors.Peach}
+              size={30}
+            />
+          ),
           drawerStyle: {
             backgroundColor: "white",
           },
@@ -62,7 +76,7 @@ export default function App() {
               textTransform: "uppercase",
               fontFamily: "Lato-Bold",
               fontSize: 16,
-              letterSpacing: 1,
+              letterSpacing: 4,
             },
           }}
         />
@@ -70,6 +84,7 @@ export default function App() {
           name="Categories"
           component={Categories}
           options={{
+            headerTitle: "Fake Store",
             headerStyle: {
               backgroundColor: Colors.DarkestBlue,
             },
@@ -77,7 +92,28 @@ export default function App() {
             headerTintColor: "white",
             headerTitleStyle: {
               textTransform: "uppercase",
-              fontFamily: "Lato-Regular",
+              fontFamily: "Lato-Bold",
+              fontSize: 16,
+              letterSpacing: 4,
+            },
+          }}
+        />
+        <Drawer.Screen
+          name="Product Details"
+          component={ProductDetails}
+          options={{
+            headerTitle: "Product Details",
+            headerStyle: {
+              backgroundColor: Colors.DarkestBlue,
+            },
+            drawerItemStyle: {display: "none"},
+            headerTitleAlign: "center",
+            headerTintColor: "white",
+            headerTitleStyle: {
+              textTransform: "uppercase",
+              fontFamily: "Lato-Bold",
+              fontSize: 16,
+              letterSpacing: 4,
             },
           }}
         />
