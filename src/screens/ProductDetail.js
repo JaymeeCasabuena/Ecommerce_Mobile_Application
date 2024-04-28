@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, Image, FlatList } from "react-native";
 import { Colors } from "../constants/Colors";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import Material from "@expo/vector-icons/MaterialCommunityIcons";
+import StarRating from "../components/StarRating";
 import { useRoute, useNavigation } from "@react-navigation/native";
 
 export default function ProductDetails() {
@@ -42,6 +42,7 @@ export default function ProductDetails() {
           <Text style={styles.productPrice}>Price: ${product.price}</Text>
         </View>
         <View style={styles.addtlDetails}>
+          <StarRating rating={product.rating.rate}/>
           <Text style={styles.productRating}>{product.rating.rate}</Text>
           <Text style={styles.productSold}>Sold: {product.rating.count}</Text>
         </View>
@@ -82,10 +83,8 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "space-between",
     height: 40,
-    borderBlockColor: Colors.DarkestBlue,
   },
   buttons: {
-    backgroundColor: Colors.PurplishBlue,
     borderBlockColor: Colors.DarkestBlue,
     padding: 10,
     alignItems: "center",
@@ -94,15 +93,17 @@ const styles = StyleSheet.create({
   backButton: {
     width: 150,
     borderRightWidth: 0,
+    borderLeftWidth: 0,
   },
   addButton: {
     width: 262,
+    borderRightWidth: 0,
   },
   buttonText: {
     fontSize: 14,
     fontFamily: "Lato-Bold",
     color: Colors.Peach,
-    letterSpacing: 5,
+    letterSpacing: 8,
   },
   storeName: {
     fontSize: 14,

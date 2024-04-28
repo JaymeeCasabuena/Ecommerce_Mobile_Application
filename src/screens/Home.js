@@ -5,6 +5,7 @@ import {
   useWindowDimensions,
   Image,
   FlatList,
+  ActivityIndicator
 } from "react-native";
 import React from "react";
 import { useState } from "react";
@@ -16,7 +17,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 
 export default function Home() {
-  const previewProducts = getPreviewProducts();
+  const {isLoading, previewProducts} = getPreviewProducts();
   const navigation = useNavigation();
   const goToCategoryScreen = (category) => {
     navigation.navigate("Categories", category);
@@ -88,28 +89,31 @@ export default function Home() {
     key: `tab${index}`,
     title: category,
   }));
-
   return (
-    <View style={styles.container}>
-      <View style={styles.firstTabView}>
-        <TabView
-          navigationState={{ index, routes }}
-          renderScene={renderFirstScene}
-          onIndexChange={setIndex}
-          initialLayout={{ width: layout.width }}
-          renderTabBar={noTabBar}
-        />
+    isLoading ? (
+      <ActivityIndicator style={styles.loadingFigure} size="large" color="#0000ff" />
+    ) : (
+      <View style={styles.container}>
+        <View style={styles.firstTabView}>
+          <TabView
+            navigationState={{ index, routes }}
+            renderScene={renderFirstScene}
+            onIndexChange={setIndex}
+            initialLayout={{ width: layout.width }}
+            renderTabBar={noTabBar}
+          />
+        </View>
+        <View style={styles.secondTabView}>
+          <TabView
+            navigationState={{ index, routes }}
+            renderScene={renderSecondScene}
+            onIndexChange={setIndex}
+            initialLayout={{ width: layout.width }}
+            renderTabBar={renderTabBar}
+          />
+        </View>
       </View>
-      <View style={styles.secondTabView}>
-        <TabView
-          navigationState={{ index, routes }}
-          renderScene={renderSecondScene}
-          onIndexChange={setIndex}
-          initialLayout={{ width: layout.width }}
-          renderTabBar={renderTabBar}
-        />
-      </View>
-    </View>
+    )
   );
 }
 
@@ -117,6 +121,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 2,
     backgroundColor: Colors.GrayishWhite,
+  },
+  loadingFigure: {
+    flex: 1,
+    justifyContent: 'center',
   },
   firstTabView: {
     flex: 1,

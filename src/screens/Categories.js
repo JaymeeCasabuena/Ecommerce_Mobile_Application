@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Image, FlatList } from "react-native";
+import { StyleSheet, View, Text, Image, FlatList, ActivityIndicator } from "react-native";
 import { Colors } from "../constants/Colors";
 import getProductsByCategory from "../services/ProductService";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
@@ -9,7 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 export default function Categories() {
   const route = useRoute();
   const category = route.params || {};
-  const productsByCategory = getProductsByCategory(category);
+  const { isLoading, productsByCategory } = getProductsByCategory(category);
   const navigation = useNavigation();
   const goToProductDetails = (id) => {
     navigation.navigate("Product Details", {
@@ -37,16 +37,21 @@ export default function Categories() {
     </TouchableOpacity>
   );
 
-  return (
+  return isLoading ? (
+    <ActivityIndicator
+      style={styles.loadingFigure}
+      size="large"
+      color="#0000ff"
+    />
+  ) : (
     <View style={styles.container}>
       <View style={styles.banner}>
         <Text style={styles.textBanner}>{category}</Text>
-        <TouchableOpacity onPress={() => goBackToHome()} style={styles.backButton}>
-          <Material
-            name={"chevron-left"}
-            style={styles.backIcon}
-            size={20}
-          />
+        <TouchableOpacity
+          onPress={() => goBackToHome()}
+          style={styles.backButton}
+        >
+          <Material name={"chevron-left"} style={styles.backIcon} size={20} />
           <Text style={styles.backBtnText}>Back to Homepage</Text>
         </TouchableOpacity>
       </View>
@@ -80,10 +85,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.GrayishWhite,
   },
+  loadingFigure: {
+    flex: 1,
+    justifyContent: 'center'
+  },
   banner: {
     flexDirection: "column",
     justifyContent: "center",
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: Colors.PurplishBlue,
     height: 250,
   },
@@ -97,8 +106,8 @@ const styles = StyleSheet.create({
     letterSpacing: 8,
   },
   backButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   backIcon: {
     color: Colors.IcyBlue,
