@@ -3,6 +3,8 @@ import { Colors } from "../constants/Colors";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import StarRating from "../components/StarRating";
 import { useRoute, useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/CartSlice";
 
 export default function ProductDetails() {
   const route = useRoute();
@@ -14,10 +16,11 @@ export default function ProductDetails() {
       : null;
   };
   const goBackToProductList = (categories) => {
-    navigation.navigate('Categories', categories)
-  }
+    navigation.navigate("Categories", categories);
+  };
 
   const product = getProductToDisplay();
+  const dispatch = useDispatch()
 
   return (
     <View style={styles.container}>
@@ -32,7 +35,7 @@ export default function ProductDetails() {
           >
             <Text style={styles.buttonText}>Back</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.buttons, styles.addButton]}>
+          <TouchableOpacity onPress={() => dispatch(addToCart(product))} style={[styles.buttons, styles.addButton]}>
             <Text style={styles.buttonText}>Add</Text>
           </TouchableOpacity>
         </View>
@@ -42,12 +45,14 @@ export default function ProductDetails() {
           <Text style={styles.productPrice}>Price: ${product.price}</Text>
         </View>
         <View style={styles.addtlDetails}>
-          <StarRating rating={product.rating.rate}/>
+          <StarRating rating={product.rating.rate} />
           <Text style={styles.productRating}>{product.rating.rate}</Text>
           <Text style={styles.productSold}>Sold: {product.rating.count}</Text>
         </View>
         <ScrollView style={styles.descriptionTab}>
-          <Text style={styles.productDescription}>Product Description: {product.description}</Text>
+          <Text style={styles.productDescription}>
+            Product Description: {product.description}
+          </Text>
         </ScrollView>
       </View>
     </View>
