@@ -1,34 +1,25 @@
-import { useState, useEffect } from "react";
 import { Alert } from "react-native";
-const url = "https://fakestoreapi.com/products/category";
+const baseUrl = "https://fakestoreapi.com/";
 
-export default function getProductsByCategory(category) {
-  const [productsByCategory, getProductsByCategory] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+export const fetchProductsByCategory = async (category) => {
+      try {
+        const encodedCategory = encodeURIComponent(category);
+        const str = await fetch(`${baseUrl}products/category/${encodedCategory}`);
+        const data = await str.json();
+        return data;
+      } catch (e) {
+        console.error("error fetching products", e);
+        Alert.alert("ERROR", e?.message ?? "unknown error"), [{ text: "OK" }];
+      }
+};
 
-  useEffect(() => {
-    let isMounted = true;
-    const fetchProductsByCategory = async () => {
-      setTimeout(async () => {
-        try {
-          const encodedCategory = encodeURIComponent(category);
-          const str = await fetch(`${url}/${encodedCategory}`);
-          const data = await str.json();
-          setIsLoading(false);
-          getProductsByCategory(data);
-        } catch (e) {
-          console.error("error fetching products", e);
-          Alert.alert("ERROR", e?.message ?? "unknown error"), [{ text: "OK" }];
-          setIsLoading(false);
-        }
-      }, 2000)
-    };
-    fetchProductsByCategory();
-
-    return () => {
-      isMounted = false;
-      setIsLoading(true);
-    };
-  }, [category]);
-  return { isLoading, productsByCategory };
-}
+export const fetchSingleProduct = async (id) => {
+  try {
+    const str = await fetch(`${baseUrl}products/${id}`);
+    const data = await str.json();
+    return data;
+  } catch (e) {
+    console.error("error fetching product", e);
+    Alert.alert("ERROR", e?.message ?? "unknown error"), [{ text: "OK" }];
+  }
+};

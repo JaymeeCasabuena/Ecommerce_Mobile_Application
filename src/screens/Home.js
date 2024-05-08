@@ -8,17 +8,24 @@ import {
   ActivityIndicator
 } from "react-native";
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Colors } from "../constants/Colors";
 import { TabView, SceneMap } from "react-native-tab-view";
 import { noTabBar, renderTabBar } from "../components/TabBar";
-import getPreviewProducts from "../services/PreviewService";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { loadPreviewProducts, selectPreviewProducts } from "../redux/PreviewSlice";
 
 export default function Home() {
-  const {isLoading, previewProducts} = getPreviewProducts();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const { previewProducts, loading, error } = useSelector(selectPreviewProducts);
+
+  useEffect(() => {
+    dispatch(loadPreviewProducts()); 
+  }, [dispatch]);
+
   const goToCategoryScreen = (category) => {
     navigation.navigate("Categories", category);
   };
@@ -90,7 +97,7 @@ export default function Home() {
     title: category,
   }));
   return (
-    isLoading ? (
+    loading ? (
       <ActivityIndicator style={styles.loadingFigure} size="large" color="#0000ff" />
     ) : (
       <View style={styles.container}>

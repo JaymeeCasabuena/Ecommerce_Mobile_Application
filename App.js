@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -10,6 +10,9 @@ import { useFonts } from "expo-font";
 import { useCallback } from "react";
 import { Colors } from "./src/constants/Colors";
 import CustomNavIcon from "./src/components/CustomNavIcons";
+import { Provider } from "react-redux";
+import { store } from "./src/redux/Store";
+import OrderCart from "./src/screens/Cart";
 
 const Drawer = createDrawerNavigator();
 
@@ -37,6 +40,7 @@ export default function App() {
   }
 
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <Drawer.Navigator
         initialRouteName="Home"
@@ -117,8 +121,28 @@ export default function App() {
             },
           }}
         />
+        <Drawer.Screen
+          name="Order Cart"
+          component={OrderCart}
+          options={{
+            headerTitle: "Your Cart",
+            headerStyle: {
+              backgroundColor: Colors.DarkestBlue,
+            },
+            drawerItemStyle: {display: "none"},
+            headerTitleAlign: "center",
+            headerTintColor: "white",
+            headerTitleStyle: {
+              textTransform: "uppercase",
+              fontFamily: "Lato-Bold",
+              fontSize: 16,
+              letterSpacing: 4,
+            },
+          }}
+        />
       </Drawer.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 }
 

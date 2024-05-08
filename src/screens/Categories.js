@@ -1,19 +1,27 @@
 import { StyleSheet, View, Text, Image, FlatList, ActivityIndicator } from "react-native";
 import { Colors } from "../constants/Colors";
-import getProductsByCategory from "../services/ProductService";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import Material from "@expo/vector-icons/MaterialCommunityIcons";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { loadProductData, selectCategory } from "../redux/ProductSlice";
+import { useEffect } from "react";
 
 export default function Categories() {
   const route = useRoute();
   const category = route.params || {};
-  const { isLoading, productsByCategory } = getProductsByCategory(category);
+  const dispatch = useDispatch();
+  const { productData, loading } = useSelector(selectCategory);
+
+  useEffect(() => {
+    dispatch(loadProductData(category)); 
+  }, [dispatch, category]);
+  
   const navigation = useNavigation();
   const goToProductDetails = (id) => {
     navigation.navigate("Product Details", {
-      products: productsByCategory,
+      products: productData,
       productID: id,
       categories: category,
     });
@@ -37,7 +45,7 @@ export default function Categories() {
     </TouchableOpacity>
   );
 
-  return isLoading ? (
+  return loading ? (
     <ActivityIndicator
       style={styles.loadingFigure}
       size="large"
@@ -68,9 +76,9 @@ export default function Categories() {
           <Material name={"magnify"} style={styles.searchIcon} size={20} />
         </TextInput>
       </View>
-      <View style={styles.scrollView} key={productsByCategory.id}>
+      <View style={styles.scrollView} key={productData.id}>
         <FlatList
-          data={productsByCategory}
+          data={productData}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           numColumns={2}
