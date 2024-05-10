@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchSingleProduct } from "../services/ProductService";
 
 const initialState = {
   cart: [],
@@ -20,17 +19,24 @@ export const cartSlice = createSlice({
       } else {
         state.cart.push({ ...action.payload, quantity: 1 });
       }
+      state.totalAmount = state.cart.reduce(
+        (total, item) => total + (item.price * item.quantity),
+        0
+      );
+      state.totalItems++;
     },
-    increment: (state) => {
+    increment: (state, action) => {
       const item = state.cart.find((item) => item.id === action.payload);
       item.quantity++;
+      state.totalAmount += item.price;
     },
-    decrement: (state) => {
+    decrement: (state, action) => {
       const item = state.cart.find((item) => item.id === action.payload);
       if (item.quantity === 1) {
         item.quantity = 1;
       } else {
         item.quantity--;
+        state.totalAmount -= item.price;
       }
     },
     removeItem: (state, action) => {
@@ -42,6 +48,7 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, increment, decrement, removeItem } = cartSlice.actions;
+export const { addToCart, increment, decrement, removeItem } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;
