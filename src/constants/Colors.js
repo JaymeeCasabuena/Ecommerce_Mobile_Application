@@ -1,6 +1,7 @@
 export const Colors = {
   White: "white",
-  Black: 'black',
+  Black: "black",
+  Red: "red",
   GrayishWhite: "#e6e7e9",
   DarkestBlue: "#152b4b",
   Peach: "#edab95",

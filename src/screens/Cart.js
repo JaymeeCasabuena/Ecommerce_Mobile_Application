@@ -7,20 +7,28 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Colors } from "../constants/Colors";
+import Feather from "@expo/vector-icons/Feather";
 import { useSelector, useDispatch } from "react-redux";
 import { increment, decrement, removeItem } from "../redux/CartSlice";
 
 export default function OrderCart() {
   const dispatch = useDispatch();
   const { cart, totalAmount, totalItems } = useSelector((state) => state.cart);
+  const total = totalAmount.toFixed(2)
 
   const renderItem = ({ item }) => (
     <View style={styles.productContainer}>
       <View style={styles.imageContainer}>
         <Image source={{ uri: item.image }} style={styles.productImage} />
       </View>
+      <TouchableOpacity
+        onPress={() => dispatch(removeItem(item.id))}
+        style={styles.removeButton}
+      >
+        <Feather color={Colors.DarkestBlue} size={22} name="x" />
+      </TouchableOpacity>
       <View style={styles.productDetails}>
-        <Text numberOfLines={4} style={styles.productName}>
+        <Text numberOfLines={3} style={styles.productName}>
           {item.title}
         </Text>
         <Text style={styles.productPrice}>Price: ${item.price}</Text>
@@ -53,7 +61,7 @@ export default function OrderCart() {
         <View>
           <View style={styles.cartHeader}>
             <Text style={styles.cartText}>Items: {totalItems}</Text>
-            <Text style={styles.cartText}>Total: AUD{totalAmount}</Text>
+            <Text style={styles.cartText}>Total: AUD{total}</Text>
           </View>
           <View style={styles.scrollView} key={cart.id}>
             <FlatList
@@ -136,8 +144,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Lato-Regular",
     padding: 10,
+    marginTop: 10,
     color: Colors.DarkestBlue,
     letterSpacing: 1,
+    width: '88%'
   },
   productPrice: {
     fontSize: 14,
@@ -153,6 +163,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: 50,
+  },
+  removeButton: {
+    position: 'absolute',
+    right: 0,
+    padding: 5,
   },
   buttons: {
     borderBlockColor: Colors.DarkestBlue,

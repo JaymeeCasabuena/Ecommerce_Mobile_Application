@@ -1,9 +1,12 @@
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
+import { Colors } from "../constants/Colors";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 const CustomNavIcon = ({ onPress, iconName, color, size }) => {
   const navigation = useNavigation();
+  const { totalItems } = useSelector((state) => state.cart);
 
   const onPressHandler = () => {
     if (iconName === "menu") {
@@ -19,8 +22,27 @@ const CustomNavIcon = ({ onPress, iconName, color, size }) => {
       style={{ marginLeft: 10, marginRight: 10 }}
     >
       <Feather color={color} size={size} name={iconName} />
+      {iconName === "shopping-bag" && totalItems > 0 ? 
+      <Text style={styles.badge}>{totalItems}</Text> 
+      : null
+      }
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  badge: {
+    position: 'absolute',
+    right: -10,
+    top: -10,
+    backgroundColor: Colors.Red,
+    width: 20,
+    fontSize: 14,
+    borderRadius: 50,
+    textAlign: 'center',
+    paddingBottom: 2,
+    color: Colors.White,
+  }
+})
 
 export default CustomNavIcon;
