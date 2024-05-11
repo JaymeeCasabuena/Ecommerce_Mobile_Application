@@ -27,7 +27,7 @@ export default function Home() {
   }, [dispatch]);
 
   const goToCategoryScreen = (category) => {
-    navigation.navigate("Categories", category);
+    navigation.navigate("ProductList", category);
   };
 
   const getProductsByCategory = () => {

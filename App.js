@@ -3,8 +3,9 @@ import { StyleSheet } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createStackNavigator } from "@react-navigation/stack";
 import Home from "./src/screens/Home";
-import Categories from "./src/screens/Categories";
+import ProductList from "./src/screens/ProductList";
 import ProductDetails from "./src/screens/ProductDetail";
 import { useFonts } from "expo-font";
 import { useCallback } from "react";
@@ -13,8 +14,11 @@ import CustomNavIcon from "./src/components/CustomNavIcons";
 import { Provider } from "react-redux";
 import { store } from "./src/redux/Store";
 import OrderCart from "./src/screens/Cart";
+import CustomDrawerContent from "./src/components/CustomDrawerContent";
+import { useNavigation } from "@react-navigation/native";
 
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
 export default function App() {
   SplashScreen.preventAutoHideAsync();
@@ -39,109 +43,99 @@ export default function App() {
     return null;
   }
 
+  const MainNavigator = () => {
+    return (
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="ProductList" component={ProductList} />
+        <Stack.Screen name="Product Details" component={ProductDetails} />
+        <Stack.Screen name="Order Cart" component={OrderCart} />
+      </Stack.Navigator>
+    );
+  };
+
   return (
     <Provider store={store}>
-    <NavigationContainer>
-      <Drawer.Navigator
-        initialRouteName="Home"
-        screenOptions={({ navigation }) => ({
-          headerLeft: (props) => (
-            <CustomNavIcon
-              onPress={navigation.toggleDrawer}
-              iconName={"menu"}
-              color={Colors.Peach}
-              size={30}
-            />
-          ),
-          headerRight: (props) => (
-            <CustomNavIcon
-              iconName={"shopping-bag"}
-              color={Colors.Peach}
-              size={30}
-            />
-          ),
-          drawerStyle: {
-            backgroundColor: "white",
-          },
-        })}
-      >
-        <Drawer.Screen
-          name="Home"
-          component={Home}
-          options={{
-            headerTitle: "Fake Store",
-            headerStyle: {
-              backgroundColor: Colors.DarkestBlue,
-              height: 80,
+      <NavigationContainer>
+        <Drawer.Navigator
+          drawerContent={(props) => <CustomDrawerContent {...props} />}
+          initialRouteName="Home"
+          screenOptions={({ navigation, route }) => ({
+            headerLeft: () => {
+              return route.name === "Order Cart" ? (
+                <CustomNavIcon
+                  onPress={navigation.toggleDrawer}
+                  iconName={"arrow-left"}
+                  color={Colors.Peach}
+                  size={26}
+                  style={{ marginRight: -10}}
+                />
+              ) : (
+                <CustomNavIcon
+                  onPress={navigation.toggleDrawer}
+                  iconName={"menu"}
+                  color={Colors.Peach}
+                  size={30}
+                />
+              );
             },
-            headerTitleAlign: "center",
-            headerTintColor: "white",
-            headerTitleStyle: {
-              textTransform: "uppercase",
-              fontFamily: "Lato-Bold",
-              fontSize: 16,
-              letterSpacing: 4,
+            headerRight: () => {
+              return route.name !== "Order Cart" ? (
+                <CustomNavIcon
+                  iconName={"shopping-bag"}
+                  color={Colors.Peach}
+                  size={30}
+                />
+              ) : null
             },
-          }}
-        />
-        <Drawer.Screen
-          name="Categories"
-          component={Categories}
-          options={{
-            headerTitle: "Fake Store",
-            headerStyle: {
-              backgroundColor: Colors.DarkestBlue,
+            drawerStyle: {
+              backgroundColor: Colors.GrayishWhite,
             },
-            headerTitleAlign: "center",
-            headerTintColor: "white",
-            headerTitleStyle: {
-              textTransform: "uppercase",
-              fontFamily: "Lato-Bold",
-              fontSize: 16,
-              letterSpacing: 4,
-            },
-          }}
-        />
-        <Drawer.Screen
-          name="Product Details"
-          component={ProductDetails}
-          options={{
-            headerTitle: "Product Details",
-            headerStyle: {
-              backgroundColor: Colors.DarkestBlue,
-            },
-            drawerItemStyle: {display: "none"},
-            headerTitleAlign: "center",
-            headerTintColor: "white",
-            headerTitleStyle: {
-              textTransform: "uppercase",
-              fontFamily: "Lato-Bold",
-              fontSize: 16,
-              letterSpacing: 4,
-            },
-          }}
-        />
-        <Drawer.Screen
-          name="Order Cart"
-          component={OrderCart}
-          options={{
-            headerTitle: "Your Cart",
-            headerStyle: {
-              backgroundColor: Colors.DarkestBlue,
-            },
-            drawerItemStyle: {display: "none"},
-            headerTitleAlign: "center",
-            headerTintColor: "white",
-            headerTitleStyle: {
-              textTransform: "uppercase",
-              fontFamily: "Lato-Bold",
-              fontSize: 16,
-              letterSpacing: 4,
-            },
-          }}
-        />
-      </Drawer.Navigator>
-    </NavigationContainer>
+          })}
+        >
+          <Drawer.Screen
+            name="Main"
+            component={MainNavigator}
+            options={{
+              headerShown: true,
+              headerTitle: "Fake Store",
+              headerStyle: {
+                backgroundColor: Colors.DarkestBlue,
+              },
+              headerTitleAlign: "center",
+              headerTintColor: "white",
+              headerTitleStyle: {
+                textTransform: "uppercase",
+                fontFamily: "Lato-Bold",
+                fontSize: 16,
+                letterSpacing: 4,
+              },
+            }}
+          />
+          <Drawer.Screen
+            name="Order Cart"
+            component={OrderCart}
+            options={{
+              title: "Continue Shopping",
+              headerStyle: {
+                backgroundColor: Colors.DarkestBlue,
+              },
+              headerTitleAlign: "left",
+              headerTintColor: "white",
+              headerTitleStyle: {
+                textTransform: "uppercase",
+                fontFamily: "Lato-Bold",
+                fontSize: 14,
+                letterSpacing: 2,
+              },
+            }}
+          />
+        </Drawer.Navigator>
+      </NavigationContainer>
     </Provider>
   );
 }

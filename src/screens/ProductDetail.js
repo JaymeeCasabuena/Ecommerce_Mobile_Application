@@ -16,7 +16,7 @@ export default function ProductDetails() {
       : null;
   };
   const goBackToProductList = (categories) => {
-    navigation.navigate("Categories", categories);
+    navigation.navigate("ProductList", categories);
   };
 
   const product = getProductToDisplay();

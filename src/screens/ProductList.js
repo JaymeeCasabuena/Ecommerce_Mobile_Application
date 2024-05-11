@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadProductData, selectCategory } from "../redux/ProductSlice";
 import { useEffect } from "react";
 
-export default function Categories() {
+export default function ProductList() {
   const route = useRoute();
   const category = route.params || {};
   const dispatch = useDispatch();
