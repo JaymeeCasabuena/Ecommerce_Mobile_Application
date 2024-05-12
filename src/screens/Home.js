@@ -5,9 +5,10 @@ import {
   useWindowDimensions,
   Image,
   FlatList,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import React from "react";
+import { Video } from "expo-av";
 import { useState, useEffect } from "react";
 import { Colors } from "../constants/Colors";
 import { TabView, SceneMap } from "react-native-tab-view";
@@ -15,15 +16,22 @@ import { noTabBar, renderTabBar } from "../components/TabBar";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import { loadPreviewProducts, selectPreviewProducts } from "../redux/PreviewSlice";
+import {
+  loadPreviewProducts,
+  selectPreviewProducts,
+} from "../redux/PreviewSlice";
 
 export default function Home() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { previewProducts, loading, error } = useSelector(selectPreviewProducts);
+  const video = React.useRef(null);
+  const videoSource = require('../../assets/background_vid.mp4')
+  const { previewProducts, loading, error } = useSelector(
+    selectPreviewProducts
+  );
 
   useEffect(() => {
-    dispatch(loadPreviewProducts()); 
+    dispatch(loadPreviewProducts());
   }, [dispatch]);
 
   const goToCategoryScreen = (category) => {
@@ -64,7 +72,10 @@ export default function Home() {
             )}
           />
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={() => goToCategoryScreen(category)} style={styles.tabButton}>
+            <TouchableOpacity
+              onPress={() => goToCategoryScreen(category)}
+              style={styles.tabButton}
+            >
               <Text
                 style={styles.buttonText}
               >{`Explore More in ${category}`}</Text>
@@ -96,31 +107,42 @@ export default function Home() {
     key: `tab${index}`,
     title: category,
   }));
-  return (
-    loading ? (
-      <ActivityIndicator style={styles.loadingFigure} size="large" color="#0000ff" />
-    ) : (
-      <View style={styles.container}>
-        <View style={styles.firstTabView}>
-          <TabView
-            navigationState={{ index, routes }}
-            renderScene={renderFirstScene}
-            onIndexChange={setIndex}
-            initialLayout={{ width: layout.width }}
-            renderTabBar={noTabBar}
-          />
-        </View>
-        <View style={styles.secondTabView}>
-          <TabView
-            navigationState={{ index, routes }}
-            renderScene={renderSecondScene}
-            onIndexChange={setIndex}
-            initialLayout={{ width: layout.width }}
-            renderTabBar={renderTabBar}
-          />
-        </View>
+  return loading ? (
+    <ActivityIndicator
+      style={styles.loadingFigure}
+      size="large"
+      color="#0000ff"
+    />
+  ) : (
+    <View style={styles.container}>
+      <Video
+      ref={video}
+      style={styles.backgroundVideo}
+      source={videoSource}
+      useNativeControls={false}
+      resizeMode="contain"
+      isLooping={true}
+      shouldPlay={true}
+      />
+      <View style={styles.firstTabView}>
+        <TabView
+          navigationState={{ index, routes }}
+          renderScene={renderFirstScene}
+          onIndexChange={setIndex}
+          initialLayout={{ width: layout.width }}
+          renderTabBar={noTabBar}
+        />
       </View>
-    )
+      <View style={styles.secondTabView}>
+        <TabView
+          navigationState={{ index, routes }}
+          renderScene={renderSecondScene}
+          onIndexChange={setIndex}
+          initialLayout={{ width: layout.width }}
+          renderTabBar={renderTabBar}
+        />
+      </View>
+    </View>
   );
 }
 
@@ -131,7 +153,13 @@ const styles = StyleSheet.create({
   },
   loadingFigure: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
+  },
+  backgroundVideo: {
+    position: 'absolute',
+    width: '100%',
+    height: 230,
+
   },
   firstTabView: {
     flex: 1,
@@ -143,7 +171,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.PurplishBlue,
+    backgroundColor: 'transparent',
     height: 250,
   },
   tabText: {
@@ -197,22 +225,22 @@ const styles = StyleSheet.create({
     left: 10,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
     height: 70,
     backgroundColor: Colors.White,
   },
   tabButton: {
-    width: '100%',
+    width: "100%",
     padding: 8,
     borderRadius: 5,
   },
   buttonText: {
     fontFamily: "Lato-Bold",
     textTransform: "uppercase",
-    textDecorationLine: 'underline',
+    textDecorationLine: "underline",
     fontSize: 12,
     letterSpacing: 2,
     color: Colors.DarkestBlue,

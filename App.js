@@ -15,7 +15,6 @@ import { Provider } from "react-redux";
 import { store } from "./src/redux/Store";
 import OrderCart from "./src/screens/Cart";
 import CustomDrawerContent from "./src/components/CustomDrawerContent";
-import { useNavigation } from "@react-navigation/native";
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();

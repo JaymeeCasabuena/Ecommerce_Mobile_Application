@@ -3,12 +3,15 @@ import { Colors } from "../constants/Colors";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import StarRating from "../components/StarRating";
 import { useRoute, useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/CartSlice";
+import CustomModal from "../components/CustomModal";
 
 export default function ProductDetails() {
   const route = useRoute();
   const navigation = useNavigation();
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const { products, productID, categories } = route.params || {};
   const getProductToDisplay = () => {
     return productID
@@ -20,7 +23,16 @@ export default function ProductDetails() {
   };
 
   const product = getProductToDisplay();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -29,13 +41,23 @@ export default function ProductDetails() {
           <Image source={{ uri: product.image }} style={styles.productImage} />
         </View>
         <View style={styles.buttonContainer}>
+          <CustomModal
+            message={"Added to your bag"}
+            buttonName={"Continue shopping"}
+            isVisible={isModalVisible}
+            onClose={closeModal}
+            item={product}
+          ></CustomModal>
           <TouchableOpacity
             onPress={() => goBackToProductList(categories)}
             style={[styles.buttons, styles.backButton]}
           >
             <Text style={styles.buttonText}>Back</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => dispatch(addToCart(product))} style={[styles.buttons, styles.addButton]}>
+          <TouchableOpacity
+            onPress={() => handleAddToCart(product)}
+            style={[styles.buttons, styles.addButton]}
+          >
             <Text style={styles.buttonText}>Add</Text>
           </TouchableOpacity>
         </View>
@@ -170,6 +192,6 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     color: Colors.White,
     letterSpacing: 2,
-    textAlign: "justify",
+    textAlign: "left",
   },
 });
