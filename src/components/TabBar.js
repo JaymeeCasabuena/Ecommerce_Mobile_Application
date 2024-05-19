@@ -8,7 +8,7 @@ const renderTabBar = (props) => (
     <TabBar
       {...props}
       indicatorStyle={{ backgroundColor: Colors.DarkestBlue }}
-      style={{ backgroundColor: "white", color: Colors.DarkestBlue }}
+      style={{ backgroundColor: "transparent", color: Colors.DarkestBlue, marginTop: 10 }}
       renderLabel={({ route, focused }) => (
         <Text style={styles.tabText}>{route.title}</Text>
       )}
@@ -22,7 +22,7 @@ const noTabBar = () => null;
 
 const styles = StyleSheet.create({
     tabText: {
-      fontSize: 12,
+      fontSize: 11,
       fontFamily: 'Lato-Bold',
       color: Colors.DarkestBlue,
       textTransform: 'uppercase',

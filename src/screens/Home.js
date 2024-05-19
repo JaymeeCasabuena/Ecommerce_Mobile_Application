@@ -8,9 +8,9 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React from "react";
-import { Video } from "expo-av";
 import { useState, useEffect } from "react";
 import { Colors } from "../constants/Colors";
+import { BackgroundImages } from "../constants/BackgroundImages";
 import { TabView, SceneMap } from "react-native-tab-view";
 import { noTabBar, renderTabBar } from "../components/TabBar";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -24,8 +24,6 @@ import {
 export default function Home() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const video = React.useRef(null);
-  const videoSource = require('../../assets/background_vid.mp4')
   const { previewProducts, loading, error } = useSelector(
     selectPreviewProducts
   );
@@ -70,6 +68,7 @@ export default function Home() {
                 <Text style={styles.productPrice}>{`$${item.price}`}</Text>
               </View>
             )}
+            numColumns={2}
           />
           <View style={styles.buttonContainer}>
             <TouchableOpacity
@@ -87,11 +86,30 @@ export default function Home() {
     return productTabs;
   };
 
+  const getBackgroundImageForCategory = (category) => {
+    switch (category) {
+      case "jewelery":
+        return BackgroundImages.Jewelery;
+      case "electronics":
+        return BackgroundImages.Electronics;
+      case "men's clothing":
+        return BackgroundImages.Mens;
+      case "women's clothing":
+        return BackgroundImages.Womens;
+      default:
+        return null;
+    }
+  };
+
   const generateTabs = () => {
     const tabs = {};
     Object.keys(categoryGroup).forEach((category, index) => {
+      const backgroundImage = getBackgroundImageForCategory(category);
       tabs[`tab${index}`] = () => (
         <View style={styles.tabPage}>
+          {backgroundImage && (
+            <Image source={backgroundImage} style={styles.backgroundImage} />
+          )}
           <Text style={styles.textBanner}>{category}</Text>
         </View>
       );
@@ -115,15 +133,6 @@ export default function Home() {
     />
   ) : (
     <View style={styles.container}>
-      <Video
-      ref={video}
-      style={styles.backgroundVideo}
-      source={videoSource}
-      useNativeControls={false}
-      resizeMode="contain"
-      isLooping={true}
-      shouldPlay={true}
-      />
       <View style={styles.firstTabView}>
         <TabView
           navigationState={{ index, routes }}
@@ -155,24 +164,23 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
   },
-  backgroundVideo: {
-    position: 'absolute',
-    width: '100%',
-    height: 230,
-
+  backgroundImage: {
+    position: "absolute",
+    width: "100%",
+    height: 300,
   },
   firstTabView: {
     flex: 1,
   },
   secondTabView: {
-    flex: 2.5,
+    flex: 2,
   },
   tabPage: {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: 'transparent',
-    height: 250,
+    backgroundColor: "transparent",
+    height: 300,
   },
   tabText: {
     fontSize: 12,
@@ -192,7 +200,7 @@ const styles = StyleSheet.create({
   },
   productPage: {
     flex: 1,
-    flexDirection: "column",
+    flexWrap: 'wrap',
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: Colors.GrayishWhite,
@@ -205,22 +213,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     margin: 10,
-    width: 380,
-    height: 320,
+    width: 180,
+    height: 180,
     backgroundColor: "white",
     borderRadius: 6,
     elevation: 5,
   },
   productImage: {
-    width: 350,
-    height: 300,
+    width: 100,
+    height: 100,
     resizeMode: "center",
   },
   productPrice: {
-    fontSize: 18,
+    fontSize: 14,
     fontFamily: "Lato-Regular",
     position: "absolute",
-    color: Colors.Peach,
+    color: Colors.DarkestBlue,
     bottom: 10,
     left: 10,
   },
@@ -230,7 +238,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     height: 70,
-    backgroundColor: Colors.White,
+    backgroundColor: 'transparent',
   },
   tabButton: {
     width: "100%",
