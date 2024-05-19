@@ -108,8 +108,20 @@ const StackNavigator = () => {
             name="Profile"
             component={UserProfile}
             options={{
+              headerShown: true,
+              headerTitle: "Fake Store",
+              headerStyle: {
+                backgroundColor: Colors.DarkestBlue,
+              },
+              headerTitleAlign: "center",
+              headerTintColor: "white",
+              headerTitleStyle: {
+                textTransform: "uppercase",
+                fontFamily: "Lato-Bold",
+                fontSize: 16,
+                letterSpacing: 4,
+              },
               tabBarShowLabel: false,
-              headerShown: false,
               tabBarIcon: ({ focused }) =>
                 focused ? (
                   <FontAwesome
