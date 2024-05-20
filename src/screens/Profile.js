@@ -1,9 +1,11 @@
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Colors } from "../constants/Colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome6";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons"
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import EvilIcons from "@expo/vector-icons/EvilIcons"
 
 export default function UserProfile() {
   const [isShow, setShow] = useState(true);
@@ -14,7 +16,12 @@ export default function UserProfile() {
   };
 
   const goToLogin = () => {
-    navigation.navigate("Login");
+    clearAuthToken();
+  };
+
+  const clearAuthToken = async () => {
+    await AsyncStorage.removeItem("authToken");
+    navigation.replace("Login");
   };
 
   return (

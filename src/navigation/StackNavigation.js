@@ -24,126 +24,124 @@ const StackNavigator = () => {
 
   function BottomTabs() {
     return (
-        <Tab.Navigator>
-          <Tab.Screen
-            name="Home"
-            component={Home}
-            options={{
-              headerShown: true,
-              headerTitle: "Fake Store",
-              headerStyle: {
-                backgroundColor: Colors.DarkestBlue,
-              },
-              headerTitleAlign: "center",
-              headerTintColor: "white",
-              headerTitleStyle: {
-                textTransform: "uppercase",
-                fontFamily: "Lato-Bold",
-                fontSize: 16,
-                letterSpacing: 4,
-              },
-              tabBarShowLabel: false,
-              tabBarIcon: ({ focused }) =>
-                focused ? (
-                  <FontAwesome
-                    name="florin-sign"
-                    size={22}
-                    color={Colors.Peach}
-                  />
-                ) : (
-                  <FontAwesome
-                    name="florin-sign"
-                    size={22}
-                    color={Colors.Gray}
-                  />
-                ),
-            }}
-          />
-          <Tab.Screen
-            name="Products"
-            component={Home}
-            options={{
-              tabBarShowLabel: false,
-              headerShown: false,
-              tabBarIcon: ({ focused }) =>
-                focused ? (
-                  <FontAwesome
-                    name="magnifying-glass"
-                    size={22}
-                    color={Colors.Peach}
-                  />
-                ) : (
-                  <FontAwesome
-                    name="magnifying-glass"
-                    size={22}
-                    color={Colors.Gray}
-                  />
-                ),
-            }}
-          />
-          <Tab.Screen
-            name="Cart"
-            component={OrderCart}
-            options={{
-              tabBarShowLabel: false,
-              headerShown: false,
-              tabBarBadge: totalItems ? totalItems : null,
-              tabBarIcon: ({ focused }) =>
-                focused ? (
-                  <FontAwesome
-                    name="bag-shopping"
-                    size={24}
-                    color={Colors.Peach}
-                  />
-                ) : (
-                  <FontAwesome
-                    name="bag-shopping"
-                    size={24}
-                    color={Colors.Gray}
-                  />
-                ),
-            }}
-          />
-          <Tab.Screen
-            name="Profile"
-            component={UserProfile}
-            options={{
-              headerShown: true,
-              headerTitle: "Fake Store",
-              headerStyle: {
-                backgroundColor: Colors.DarkestBlue,
-              },
-              headerTitleAlign: "center",
-              headerTintColor: "white",
-              headerTitleStyle: {
-                textTransform: "uppercase",
-                fontFamily: "Lato-Bold",
-                fontSize: 16,
-                letterSpacing: 4,
-              },
-              tabBarShowLabel: false,
-              tabBarIcon: ({ focused }) =>
-                focused ? (
-                  <FontAwesome
-                    name="grip-lines"
-                    size={24}
-                    color={Colors.Peach}
-                  />
-                ) : (
-                  <FontAwesome
-                    name="grip-lines"
-                    size={24}
-                    color={Colors.Gray}
-                  />
-                ),
-            }}
-          />
-        </Tab.Navigator>
+      <Tab.Navigator>
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{
+            headerShown: true,
+            headerTitle: "Fake Store",
+            headerStyle: {
+              backgroundColor: Colors.DarkestBlue,
+            },
+            headerTitleAlign: "center",
+            headerTintColor: "white",
+            headerTitleStyle: {
+              textTransform: "uppercase",
+              fontFamily: "Lato-Bold",
+              fontSize: 16,
+              letterSpacing: 4,
+            },
+            tabBarShowLabel: false,
+            tabBarIcon: ({ focused }) =>
+              focused ? (
+                <FontAwesome
+                  name="florin-sign"
+                  size={22}
+                  color={Colors.Peach}
+                />
+              ) : (
+                <FontAwesome name="florin-sign" size={22} color={Colors.Gray} />
+              ),
+          }}
+        />
+        <Tab.Screen
+          name="Products"
+          component={Home}
+          options={{
+            tabBarShowLabel: false,
+            headerShown: false,
+            tabBarIcon: ({ focused }) =>
+              focused ? (
+                <FontAwesome
+                  name="magnifying-glass"
+                  size={22}
+                  color={Colors.Peach}
+                />
+              ) : (
+                <FontAwesome
+                  name="magnifying-glass"
+                  size={22}
+                  color={Colors.Gray}
+                />
+              ),
+          }}
+        />
+        <Tab.Screen
+          name="Cart"
+          component={OrderCart}
+          options={{
+            tabBarShowLabel: false,
+            headerShown: false,
+            tabBarBadge: totalItems ? totalItems : null,
+            tabBarIcon: ({ focused }) =>
+              focused ? (
+                <FontAwesome
+                  name="bag-shopping"
+                  size={24}
+                  color={Colors.Peach}
+                />
+              ) : (
+                <FontAwesome
+                  name="bag-shopping"
+                  size={24}
+                  color={Colors.Gray}
+                />
+              ),
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={UserProfile}
+          options={{
+            headerShown: true,
+            headerTitle: "Fake Store",
+            headerStyle: {
+              backgroundColor: Colors.DarkestBlue,
+            },
+            headerTitleAlign: "center",
+            headerTintColor: "white",
+            headerTitleStyle: {
+              textTransform: "uppercase",
+              fontFamily: "Lato-Bold",
+              fontSize: 16,
+              letterSpacing: 4,
+            },
+            tabBarShowLabel: false,
+            tabBarIcon: ({ focused }) =>
+              focused ? (
+                <FontAwesome name="grip-lines" size={24} color={Colors.Peach} />
+              ) : (
+                <FontAwesome name="grip-lines" size={24} color={Colors.Gray} />
+              ),
+          }}
+        />
+      </Tab.Navigator>
     );
   }
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name="Login"
+          component={SignIn}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Sign up"
+          component={SignUp}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Main"
           component={BottomTabs}
@@ -157,16 +155,6 @@ const StackNavigator = () => {
         <Stack.Screen
           name="Product Details"
           component={ProductDetails}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Login"
-          component={SignIn}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Sign up"
-          component={SignUp}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
