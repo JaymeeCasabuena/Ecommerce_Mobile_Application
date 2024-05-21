@@ -58,13 +58,7 @@ const sendVerificationEmail = async (email, verificationToken) => {
   }
 };
 
-app.get("/", (req, res) => {
-  res.send("Hello, world!");
-});
-
 app.post("/register", async (req, res) => {
-  res.send("Hello, world!");
-  console.log("Request received at /register");
   try {
     const { name, email, password } = req.body;
 
@@ -107,9 +101,8 @@ app.get("/verify/:token", async (req, res) => {
 });
 
 const generateSecretKey = () => {
-    const secretKey = crypto.randomBytes(32).toString("hex");
-
-    return secretKey
+  const secretKey = crypto.randomBytes(32).toString("hex");
+  return secretKey;
 };
 
 const secretKey = generateSecretKey();
@@ -125,13 +118,49 @@ app.post("/login", async (req, res) => {
     }
 
     if (user.password !== password) {
-        return res.status(401).json({ message: "Invalid password" });
+      return res.status(401).json({ message: "Invalid password" });
     }
 
-    const token = jwt.sign({userId: user._id}, secretKey);
+    const token = jwt.sign({ userId: user._id }, secretKey);
 
-    res.status(200).json({token})
+    res.status(200).json({ token });
   } catch (err) {
     res.status(500).json({ message: "Login Failed" });
   }
 });
+
+app.post("/addresses", async (req, res) => {
+  try {
+    const {userId, address} = req.body;
+
+    const user = await User.findById(userId)
+
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+    }
+
+    user.addresses.push(address);
+    await user.save()
+
+    res.status(200).json({ message: "Address added successfully" });
+
+  } catch (err) {
+    res.status(500).json({ message: "Error adding address" });
+  }
+});
+
+app.get("/addresses/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+    }
+    const addresses = user.addresses;
+    res.status(200).json({addresses});
+  }
+  catch {
+    res.status(500).json({ message: "Error retrieving addresses" });
+  }
+})

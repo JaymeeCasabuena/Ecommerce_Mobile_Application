@@ -9,11 +9,9 @@ import ProductList from "../screens/ProductList";
 import SignIn from "../screens/Login";
 import SignUp from "../screens/RegisterUser";
 import ProductDetails from "../screens/ProductDetail";
+import AddNewAddress from "../screens/AddNewAddress";
 import UserProfile from "../screens/Profile";
 import { Colors } from "../constants/Colors";
-import Entypo from "@expo/vector-icons/Entypo";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import EvilIcons from "@expo/vector-icons/EvilIcons";
 import FontAwesome from "@expo/vector-icons/FontAwesome6";
 import { useSelector } from "react-redux";
 
@@ -156,6 +154,25 @@ const StackNavigator = () => {
           name="Product Details"
           component={ProductDetails}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Add New Address"
+          component={AddNewAddress}
+          options={{
+            headerShown: true,
+            headerTitle: "Fake Store",
+            headerStyle: {
+              backgroundColor: Colors.DarkestBlue,
+            },
+            headerTitleAlign: "center",
+            headerTintColor: "white",
+            headerTitleStyle: {
+              textTransform: "uppercase",
+              fontFamily: "Lato-Bold",
+              fontSize: 16,
+              letterSpacing: 4,
+            },
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

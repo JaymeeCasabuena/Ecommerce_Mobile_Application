@@ -21,13 +21,11 @@ const userSchema = new mongoose.Schema({
       verificationToken: String,
       addresses: [
         {
-          name: String,
+          fullName: String,
           mobileNo: String,
-          houseNo: String,
           street: String,
-          landmark: String,
-          city: String,
-          country: String,
+          suburb: String,
+          state: String,
           postalCode: String,
         },
       ],

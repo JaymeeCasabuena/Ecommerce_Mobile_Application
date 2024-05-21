@@ -6,6 +6,7 @@ import { useCallback } from "react";
 import { Provider } from "react-redux";
 import { store } from "./src/redux/Store";
 import StackNavigator from "./src/navigation/StackNavigation";
+import { UserContext } from "./UserContext";
 
 export default function App() {
   SplashScreen.preventAutoHideAsync();
@@ -32,7 +33,9 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <StackNavigator/>
+      <UserContext>
+        <StackNavigator />
+      </UserContext>
     </Provider>
   );
 }

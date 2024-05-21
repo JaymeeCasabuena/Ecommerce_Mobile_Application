@@ -31,7 +31,7 @@ const orderSchema = new mongoose.Schema({
     required: true,
   },
   shippingAddress: {
-    name: {
+    fullName: {
       type: String,
       required: true,
     },
@@ -39,15 +39,15 @@ const orderSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    houseNo: {
-      type: String,
-      required: true,
-    },
     street: {
       type: String,
       required: true,
     },
-    landmark: {
+    suburb: {
+      type: String,
+      required: true,
+    },
+    state: {
       type: String,
       required: true,
     },
