@@ -14,7 +14,7 @@ import { increment, decrement, removeItem } from "../redux/CartSlice";
 export default function OrderCart() {
   const dispatch = useDispatch();
   const { cart, totalAmount, totalItems } = useSelector((state) => state.cart);
-  const total = totalAmount.toFixed(2)
+  const total = totalAmount.toFixed(2);
 
   const renderItem = ({ item }) => (
     <View style={styles.productContainer}>
@@ -58,10 +58,15 @@ export default function OrderCart() {
       {totalItems < 1 ? (
         <Text style={styles.emptyCart}> Your bag is empty </Text>
       ) : (
-        <View>
+        <View style={styles.cartContainer}>
           <View style={styles.cartHeader}>
-            <Text style={styles.cartText}>Items: {totalItems}</Text>
-            <Text style={styles.cartText}>Total: AUD{total}</Text>
+            <Text style={styles.cartText}>Total: ${total}</Text>
+            <TouchableOpacity
+              // onPress={() => dispatch(increment(item.id))}
+              style={styles.checkOutBtn}
+            >
+              <Text style={styles.buttonText}>Go to checkout</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.scrollView} key={cart.id}>
             <FlatList
@@ -79,9 +84,10 @@ export default function OrderCart() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: "100%",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
     backgroundColor: Colors.GrayishWhite,
-    justifyContent: "center",
-    alignItems: "center",
   },
   emptyCart: {
     textAlign: "center",
@@ -91,28 +97,45 @@ const styles = StyleSheet.create({
     color: Colors.DarkestBlue,
     letterSpacing: 2,
   },
+  cartContainer: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    width: "100%",
+  },
   cartHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'column',
+    justifyContent: "flex-end",
+    alignItems: "flex-start",
     width: "100%",
     height: 150,
-    backgroundColor: Colors.PurplishBlue,
     padding: 20,
+    marginBottom: 10,
+    borderBottomWidth: 0.5,
+    borderColor: Colors.Black,
   },
   cartText: {
     textAlign: "center",
     fontSize: 18,
-    textTransform: "uppercase",
     fontFamily: "Poppins-Bold",
     color: Colors.Peach,
-    letterSpacing: 2,
+    letterSpacing: 1,
+  },
+  checkOutBtn: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: '100%',
+    marginTop: 10,
+    borderWidth: 0.5,
+    backgroundColor: Colors.PurplishBlue,
+    borderColor: Colors.Gray,
   },
   scrollView: {
-    flex: 1,
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "flex-start",
+    height: 700,
+    paddingBottom: 20,
   },
   productContainer: {
     flexDirection: "row",
@@ -121,8 +144,9 @@ const styles = StyleSheet.create({
     width: "95%",
     height: 170,
     margin: 10,
-    borderWidth: 1,
-    borderColor: Colors.Gray,
+    borderWidth: 0.5,
+    borderColor: Colors.Black,
+
   },
   imageContainer: {
     flexDirection: "row",
@@ -141,17 +165,17 @@ const styles = StyleSheet.create({
     width: "55%",
   },
   productName: {
-    fontSize: 14,
-    fontFamily: "Lato-Regular",
+    fontSize: 12,
+    fontFamily: "Poppins-Regular",
     padding: 10,
     marginTop: 10,
     color: Colors.DarkestBlue,
     letterSpacing: 1,
-    width: '88%'
+    width: "88%",
   },
   productPrice: {
-    fontSize: 14,
-    fontFamily: "Lato-Regular",
+    fontSize: 12,
+    fontFamily: "Poppins-Regular",
     padding: 10,
     paddingTop: 0,
     color: Colors.Peach,
@@ -165,7 +189,7 @@ const styles = StyleSheet.create({
     height: 50,
   },
   removeButton: {
-    position: 'absolute',
+    position: "absolute",
     right: 0,
     padding: 5,
   },
@@ -178,11 +202,13 @@ const styles = StyleSheet.create({
     height: 40,
   },
   buttonText: {
-    fontSize: 26,
+    fontSize: 20,
+    padding: 5,
     textAlign: "center",
-    fontFamily: "Lato-Bold",
+    textAlignVertical: 'center',
+    fontFamily: "Poppins-SemiBold",
     color: Colors.Peach,
-    letterSpacing: 8,
+    letterSpacing: 1,
   },
   quantityContainer: {
     borderBlockColor: Colors.DarkestBlue,
@@ -195,7 +221,7 @@ const styles = StyleSheet.create({
     height: 40,
   },
   productQuantity: {
-    fontSize: 16,
+    fontSize: 12,
     fontFamily: "Lato-Bold",
     color: Colors.DarkestBlue,
   },

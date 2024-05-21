@@ -170,7 +170,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.White,
   },
   buttonName: {
-    fontSize: 16,
+    fontFamily: "Poppins-Regular",
+    fontSize: 14,
     color: Colors.Black,
     marginLeft: 20,
   },

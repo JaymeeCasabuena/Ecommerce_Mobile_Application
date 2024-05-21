@@ -4,8 +4,8 @@ import {
   View,
   useWindowDimensions,
   Image,
-  FlatList,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import React from "react";
 import { useState, useEffect } from "react";
@@ -55,21 +55,12 @@ export default function Home() {
     Object.keys(categoryGroup).forEach((category, index) => {
       productTabs[`tab${index}`] = () => (
         <View style={styles.productPage}>
-          <FlatList
-            style={styles.scrollView}
-            data={categoryGroup[category]}
-            keyExtractor={(item, itemIndex) => `tab-${index}-${itemIndex}`}
-            renderItem={({ item }) => (
-              <View style={styles.productContainer}>
-                <Image
-                  source={{ uri: item.image }}
-                  style={styles.productImage}
-                />
-                <Text style={styles.productPrice}>{`$${item.price}`}</Text>
-              </View>
-            )}
-            numColumns={2}
-          />
+          {categoryGroup[category].map((item) => (
+            <View key={item.id} style={styles.productContainer}>
+              <Image source={{ uri: item.image }} style={styles.productImage} />
+              <Text style={styles.productPrice}>{`$${item.price}`}</Text>
+            </View>
+          ))}
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               onPress={() => goToCategoryScreen(category)}
@@ -132,7 +123,14 @@ export default function Home() {
       color="#0000ff"
     />
   ) : (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.scrollViewContent}
+    >
+      <Image
+        source={require("../../assets/BackgroundImages/PromoBanner.png")}
+        style={styles.promoBanner}
+      />
       <View style={styles.firstTabView}>
         <TabView
           navigationState={{ index, routes }}
@@ -151,18 +149,25 @@ export default function Home() {
           renderTabBar={renderTabBar}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 2,
     backgroundColor: Colors.GrayishWhite,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
   },
   loadingFigure: {
     flex: 1,
     justifyContent: "center",
+  },
+  promoBanner: {
+    width: "100%",
+    height: 200,
+    marginTop: 20,
   },
   backgroundImage: {
     position: "absolute",
@@ -170,10 +175,14 @@ const styles = StyleSheet.create({
     height: 300,
   },
   firstTabView: {
-    flex: 1,
+    height: 270,
+    marginTop: 20,
+    borderBottomWidth: 0.5,
+    borderTopWidth: 0.5,
+    borderColor: Colors.Black,
   },
   secondTabView: {
-    flex: 2,
+    height: 600,
   },
   tabPage: {
     flexDirection: "column",
@@ -199,14 +208,11 @@ const styles = StyleSheet.create({
     letterSpacing: 8,
   },
   productPage: {
-    flex: 1,
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: Colors.GrayishWhite,
-  },
-  scrollView: {
-    marginTop: 10,
   },
   productContainer: {
     flexDirection: "column",
@@ -228,7 +234,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Lato-Regular",
     position: "absolute",
-    color: Colors.DarkestBlue,
+    color: Colors.Peach,
     bottom: 10,
     left: 10,
   },
@@ -237,18 +243,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    height: 70,
-    backgroundColor: 'transparent',
-  },
-  tabButton: {
-    width: "100%",
-    padding: 8,
-    borderRadius: 5,
+    marginTop: 20,
+    height: 40,
+    backgroundColor: "transparent",
+    borderBottomWidth: 0.5,
+    borderTopWidth: 0.5,
+    borderColor: Colors.Black,
   },
   buttonText: {
-    fontFamily: "Lato-Bold",
+    fontFamily: "Poppins-Regular",
     textTransform: "uppercase",
-    textDecorationLine: "underline",
     fontSize: 12,
     letterSpacing: 2,
     color: Colors.DarkestBlue,

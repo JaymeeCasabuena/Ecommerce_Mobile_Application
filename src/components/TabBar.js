@@ -22,10 +22,10 @@ const noTabBar = () => null;
 
 const styles = StyleSheet.create({
     tabText: {
-      fontSize: 11,
-      fontFamily: 'Lato-Bold',
-      color: Colors.DarkestBlue,
-      textTransform: 'uppercase',
+      fontSize: 12,
+      fontFamily: 'Poppins-SemiBold',
+      color: Colors.PurplishBlue,
+      textTransform: "capitalize",
     }
   });
 

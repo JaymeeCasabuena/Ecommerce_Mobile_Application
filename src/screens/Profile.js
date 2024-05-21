@@ -151,9 +151,9 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   user: {
+    fontFamily: "Poppins-Regular",
     padding: 20,
-    fontSize: 16,
-    letterSpacing: 2,
+    fontSize: 14,
     color: Colors.Black,
     backgroundColor: Colors.White,
     width: "100%",
@@ -198,7 +198,8 @@ const styles = StyleSheet.create({
     left: 10,
   },
   addressDetails: {
-    fontSize: 16,
+    fontFamily: "Poppins-Regular",
+    fontSize: 14,
     color: Colors.Black,
     marginLeft: 30,
   },
@@ -228,7 +229,8 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   buttonName: {
-    fontSize: 16,
+    fontFamily: "Poppins-Regular",
+    fontSize: 14,
     color: Colors.Black,
     marginLeft: 20,
   },
