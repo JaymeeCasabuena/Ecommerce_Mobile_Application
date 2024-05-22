@@ -25,30 +25,29 @@ const AddNewAddress = () => {
   const [state, setState] = useState();
   const [postalCode, setPostalCode] = useState();
 
-  const addNewAddress = () => {
-    handleAddingNewAddress(
-      userId,
-      fullName,
-      mobileNo,
-      street,
-      suburb,
-      state,
-      postalCode
-    )
-      .then(() => {
-        setCustmoreName("");
-        setMobileNo("");
-        setStreet("");
-        setSuburb("");
-        setState("");
-        setPostCode("");
-        setTimeout(() => {
-          navigation.goBack();
-        }, 500);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+  const addNewAddress = async () => {
+    try {
+      await handleAddingNewAddress(
+        userId,
+        fullName,
+        mobileNo,
+        street,
+        suburb,
+        state,
+        postalCode
+      );
+      setFullName("");
+      setMobileNo("");
+      setStreet("");
+      setSuburb("");
+      setState("");
+      setPostalCode("");
+      setTimeout(() => {
+        navigation.goBack();
+      }, 500);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

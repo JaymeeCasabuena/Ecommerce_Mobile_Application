@@ -5,6 +5,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import CustomNavIcon from "../components/CustomNavIcons";
 import OrderCart from "../screens/Cart";
 import Home from "../screens/Home";
+import Categories from "../screens/Categories";
+import Checkout from "../screens/Checkout";
 import ProductList from "../screens/ProductList";
 import SignIn from "../screens/Login";
 import SignUp from "../screens/RegisterUser";
@@ -55,7 +57,7 @@ const StackNavigator = () => {
         />
         <Tab.Screen
           name="Products"
-          component={Home}
+          component={Categories}
           options={{
             tabBarShowLabel: false,
             headerShown: false,
@@ -161,6 +163,25 @@ const StackNavigator = () => {
           options={{
             headerShown: true,
             headerTitle: "Fake Store",
+            headerStyle: {
+              backgroundColor: Colors.DarkestBlue,
+            },
+            headerTitleAlign: "center",
+            headerTintColor: "white",
+            headerTitleStyle: {
+              textTransform: "uppercase",
+              fontFamily: "Lato-Bold",
+              fontSize: 16,
+              letterSpacing: 4,
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Checkout"
+          component={Checkout}
+          options={{
+            headerShown: true,
+            headerTitle: "Check out",
             headerStyle: {
               backgroundColor: Colors.DarkestBlue,
             },

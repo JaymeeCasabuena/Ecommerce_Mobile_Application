@@ -1,0 +1,169 @@
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Text,
+  TouchableOpacity,
+} from "react-native";
+import { fetchAddresses } from "../services/AddressService";
+import { useContext, useEffect, useState, useCallback } from "react";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { UserType } from "../../UserContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { jwtDecode } from "jwt-decode";
+import "core-js/stable/atob";
+import { useSelector, useDispatch } from "react-redux";
+import { setDefaultAddress } from "../redux/AddressSlice";
+import MaterialIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import Feather from "@expo/vector-icons/Feather";
+import { Colors } from "../constants/Colors";
+
+const SelectDefaultAddress = () => {
+  const navigation = useNavigation();
+  const { userId, setUserId } = useContext(UserType);
+  const [addresses, setAddresses] = useState();
+  const { defaultAddress } = useSelector((state) => state.address);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = await AsyncStorage.getItem("authToken");
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.userId;
+      setUserId(userId);
+    };
+    fetchUser();
+  }, []);
+
+  const loadAddresses = async () => {
+    if (userId) {
+      const fetchedAddresses = await fetchAddresses(userId);
+      setAddresses(fetchedAddresses);
+    }
+  };
+
+  useEffect(() => {
+    loadAddresses();
+  }, [userId]);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadAddresses();
+    }, [])
+  );
+
+  const goToAddAddress = () => {
+    navigation.navigate("Add New Address");
+  };
+
+
+  return (
+    <View style={styles.scrollView}>
+      <FlatList
+        data={addresses?.sort(
+          (a, b) =>
+            (b._id === defaultAddress._id ? 1 : 0) -
+            (a._id === defaultAddress._id ? 1 : 0)
+        )}
+        renderItem={({ item }) => (
+          <View key={addresses._id} style={styles.addressContainer}>
+            <TouchableOpacity
+              style={styles.addressButton}
+              onPress={() => dispatch(setDefaultAddress(item))}
+            >
+              {defaultAddress && defaultAddress._id === item?._id ? (
+                <MaterialIcons
+                  style={styles.icons}
+                  name="record-circle-outline"
+                  size={22}
+                  color={Colors.PurplishBlue}
+                />
+              ) : (
+                <MaterialIcons
+                  style={styles.icons}
+                  name="circle-outline"
+                  size={22}
+                  color={Colors.Gray}
+                />
+              )}
+              <View style={styles.addressTab}>
+                {defaultAddress && defaultAddress._id === item?._id ? (
+                  <Text style={[styles.addressDetails, styles.defaultText]}>
+                    Default Address
+                  </Text>
+                ) : null}
+                <Text style={styles.addressDetails}>{item.street}</Text>
+                <Text style={styles.addressDetails}>
+                  {item.fullName} - {item.mobileNo}
+                </Text>
+                <Text style={styles.addressDetails}>
+                  {item.street} {item.suburb} {item.state} {item.postalCode}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        )}
+        keyExtractor={(item) => item._id.toString()}
+      />
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => goToAddAddress()}
+      >
+        <Feather style={styles.icons} name="plus" size={20} color={Colors.PurplishBlue} />
+        <Text style={styles.addressDetails}>Add a new address</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  scrollView: {
+    flexDirection: "column",
+    alignSelf: "center",
+    alignItems: "flex-start",
+    width: 350,
+    height: 240,
+    backgroundColor: Colors.White,
+  },
+  addressButton: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    width: 350,
+    borderBottomWidth: 0.5,
+    borderColor: Colors.Black,
+  },
+  icons: {
+    marginLeft: 20,
+  },
+  addressTab: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  defaultText: {
+    color: Colors.Gray,
+    fontSize: 12,
+    fontStyle: "italic",
+    marginBottom: 5,
+  },
+  addressDetails: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 14,
+    color: Colors.Black,
+    marginLeft: 30,
+  },
+  addButton: {
+    flexDirection: "row",
+    width: "100%",
+    height: 40,
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderTopWidth: 0.5,
+    borderColor: Colors.Black,
+    backgroundColor: Colors.White,
+  },
+});
+
+export default SelectDefaultAddress;

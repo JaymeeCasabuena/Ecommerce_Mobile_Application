@@ -10,8 +10,10 @@ import { Colors } from "../constants/Colors";
 import Feather from "@expo/vector-icons/Feather";
 import { useSelector, useDispatch } from "react-redux";
 import { increment, decrement, removeItem } from "../redux/CartSlice";
+import { useNavigation } from "@react-navigation/native";
 
 export default function OrderCart() {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const { cart, totalAmount, totalItems } = useSelector((state) => state.cart);
   const total = totalAmount.toFixed(2);
@@ -62,10 +64,12 @@ export default function OrderCart() {
           <View style={styles.cartHeader}>
             <Text style={styles.cartText}>Total: ${total}</Text>
             <TouchableOpacity
-              // onPress={() => dispatch(increment(item.id))}
+              onPress={() => navigation.navigate("Checkout")}
               style={styles.checkOutBtn}
             >
-              <Text style={styles.buttonText}>Go to checkout</Text>
+              <Text style={styles.buttonText}>
+                Proceed to buy({totalItems}) items
+              </Text>
             </TouchableOpacity>
           </View>
           <View style={styles.scrollView} key={cart.id}>
@@ -90,6 +94,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.GrayishWhite,
   },
   emptyCart: {
+    alignSelf: "center",
     textAlign: "center",
     fontSize: 24,
     textTransform: "uppercase",
@@ -98,13 +103,13 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
   },
   cartContainer: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+    flexDirection: "column",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
     width: "100%",
   },
   cartHeader: {
-    flexDirection: 'column',
+    flexDirection: "column",
     justifyContent: "flex-end",
     alignItems: "flex-start",
     width: "100%",
@@ -116,7 +121,7 @@ const styles = StyleSheet.create({
   },
   cartText: {
     textAlign: "center",
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: "Poppins-Bold",
     color: Colors.Peach,
     letterSpacing: 1,
@@ -124,7 +129,7 @@ const styles = StyleSheet.create({
   checkOutBtn: {
     justifyContent: "center",
     alignItems: "center",
-    width: '100%',
+    width: "100%",
     marginTop: 10,
     borderWidth: 0.5,
     backgroundColor: Colors.PurplishBlue,
@@ -142,42 +147,43 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "flex-start",
     width: "95%",
-    height: 170,
+    height: 110,
     margin: 10,
     borderWidth: 0.5,
     borderColor: Colors.Black,
-
   },
   imageContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    width: "45%",
-    height: 168,
+    width: "35%",
+    height: 109,
     backgroundColor: "white",
   },
   productImage: {
-    width: 150,
+    width: 100,
     height: 100,
     resizeMode: "center",
   },
   productDetails: {
-    width: "55%",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    width: "65%",
+    height: "100%",
   },
   productName: {
-    fontSize: 12,
+    fontSize: 10,
     fontFamily: "Poppins-Regular",
-    padding: 10,
-    marginTop: 10,
+    paddingLeft: 10,
+    paddingBottom: 2,
     color: Colors.DarkestBlue,
     letterSpacing: 1,
     width: "88%",
   },
   productPrice: {
-    fontSize: 12,
+    fontSize: 10,
     fontFamily: "Poppins-Regular",
-    padding: 10,
-    paddingTop: 0,
+    paddingLeft: 10,
     color: Colors.Peach,
     letterSpacing: 1,
   },
@@ -186,7 +192,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    height: 50,
+    paddingBottom: 5,
   },
   removeButton: {
     position: "absolute",
@@ -196,16 +202,15 @@ const styles = StyleSheet.create({
   buttons: {
     borderBlockColor: Colors.DarkestBlue,
     justifyContent: "center",
-    paddingBottom: 5,
     borderWidth: 1,
     width: 60,
-    height: 40,
+    height: 30,
   },
   buttonText: {
-    fontSize: 20,
+    fontSize: 14,
     padding: 5,
     textAlign: "center",
-    textAlignVertical: 'center',
+    textAlignVertical: "center",
     fontFamily: "Poppins-SemiBold",
     color: Colors.Peach,
     letterSpacing: 1,
@@ -213,16 +218,16 @@ const styles = StyleSheet.create({
   quantityContainer: {
     borderBlockColor: Colors.DarkestBlue,
     width: 50,
-    padding: 10,
+    paddingTop: 5,
     alignItems: "center",
     borderWidth: 1,
     borderLeftWidth: 0,
     borderRightWidth: 0,
-    height: 40,
+    height: 30,
   },
   productQuantity: {
     fontSize: 12,
-    fontFamily: "Lato-Bold",
+    fontFamily: "Poppins-Bold",
     color: Colors.DarkestBlue,
   },
 });

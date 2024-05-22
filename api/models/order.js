@@ -30,6 +30,10 @@ const orderSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  status: {
+    type: String,
+    required: true,
+  },
   shippingAddress: {
     fullName: {
       type: String,
