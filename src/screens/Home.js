@@ -213,7 +213,6 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.PurplishBlue,
   },
   productContainer: {
     flexDirection: "column",
@@ -246,7 +245,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 30,
     height: 40,
-    backgroundColor: Colors.GrayishWhite,
+    backgroundColor: Colors.PurplishBlue,
     borderBottomWidth: 0.5,
     borderTopWidth: 0.5,
     borderColor: Colors.Black,
@@ -256,6 +255,6 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     fontSize: 12,
     letterSpacing: 2,
-    color: Colors.DarkestBlue,
+    color: Colors.White,
   },
 });

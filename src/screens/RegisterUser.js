@@ -54,6 +54,7 @@ export default function SignUp() {
             value={password}
             onChangeText={(text) => setPassword(text)}
             style={styles.input}
+            secureTextEntry={true}
             placeholder="Enter your password"
           />
           <TouchableOpacity
@@ -78,9 +79,9 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   headerText: {
+    fontFamily: 'Poppins-Bold',
     color: Colors.White,
     fontSize: 40,
-    fontWeight: "bold",
     textAlign: "center",
   },
   backButton: {
@@ -92,6 +93,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 20,
   },
   input: {
     backgroundColor: Colors.White,

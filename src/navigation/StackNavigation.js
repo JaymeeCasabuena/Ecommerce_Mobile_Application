@@ -12,7 +12,9 @@ import SignIn from "../screens/Login";
 import SignUp from "../screens/RegisterUser";
 import ProductDetails from "../screens/ProductDetail";
 import AddNewAddress from "../screens/AddNewAddress";
+import OrdersScreen from "../screens/Orders";
 import UserProfile from "../screens/Profile";
+import OrderDetails from "../screens/OrderDetails";
 import { Colors } from "../constants/Colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome6";
 import { useSelector } from "react-redux";
@@ -182,6 +184,44 @@ const StackNavigator = () => {
           options={{
             headerShown: true,
             headerTitle: "Check out",
+            headerStyle: {
+              backgroundColor: Colors.DarkestBlue,
+            },
+            headerTitleAlign: "center",
+            headerTintColor: "white",
+            headerTitleStyle: {
+              textTransform: "uppercase",
+              fontFamily: "Lato-Bold",
+              fontSize: 16,
+              letterSpacing: 4,
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Orders"
+          component={OrdersScreen}
+          options={{
+            headerShown: true,
+            headerTitle: "Check out",
+            headerStyle: {
+              backgroundColor: Colors.DarkestBlue,
+            },
+            headerTitleAlign: "center",
+            headerTintColor: "white",
+            headerTitleStyle: {
+              textTransform: "uppercase",
+              fontFamily: "Lato-Bold",
+              fontSize: 16,
+              letterSpacing: 4,
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Order Details"
+          component={OrderDetails}
+          options={{
+            headerShown: true,
+            headerTitle: "Order Details",
             headerStyle: {
               backgroundColor: Colors.DarkestBlue,
             },

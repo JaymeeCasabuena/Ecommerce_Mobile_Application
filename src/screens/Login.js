@@ -44,6 +44,7 @@ export default function SignIn() {
   return (
     <View style={styles.container}>
       <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
+      <Text style={[styles.headerText, styles.appName]}>Fake Store</Text>
         <Text style={styles.headerText}>GOOD TO SEE YOU!</Text>
         <View style={styles.loginContainer}>
           <TextInput
@@ -56,6 +57,7 @@ export default function SignIn() {
             value={password}
             onChangeText={(text) => setPassword(text)}
             style={styles.input}
+            secureTextEntry={true}
             placeholder="Enter your password"
           />
           <TouchableOpacity style={styles.button} onPress={() => login()}>
@@ -78,22 +80,34 @@ export default function SignIn() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   backgroundImage: {
     flex: 1,
+    width: '100%',
     justifyContent: "center",
     resizeMode: "cover",
   },
+  appName: {
+    color: Colors.IcyBlue,
+    fontSize: 24,
+    position: "absolute",
+    top: 120,
+    alignSelf: 'center',
+  },
   headerText: {
+    fontFamily: 'Poppins-Bold',
     color: Colors.White,
     fontSize: 40,
-    fontWeight: "bold",
     textAlign: "center",
   },
   loginContainer: {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 20,
   },
   input: {
     backgroundColor: Colors.White,

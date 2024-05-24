@@ -53,7 +53,7 @@ export default function UserProfile() {
             <FontAwesome style={styles.icons} name="user" />
             <Text style={styles.buttonName}>My Details</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.subButton}>
+          <TouchableOpacity style={styles.subButton} onPress={() => navigation.navigate("Orders")}>
             <FontAwesome style={styles.icons} name="bag-shopping" />
             <Text style={styles.buttonName}>My Orders</Text>
           </TouchableOpacity>

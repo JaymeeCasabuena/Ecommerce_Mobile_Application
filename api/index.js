@@ -16,11 +16,7 @@ const jwt = require("jsonwebtoken");
 
 mongoose
   .connect(
-    "mongodb+srv://jaymeecasabuena:Jdg091098@cluster0.xnwrby1.mongodb.net/",
-    {
-      // useNewUrlParser: true,
-      // useUnifiedTopology: true,
-    }
+    "mongodb+srv://jaymeecasabuena:Jdg091098@cluster0.xnwrby1.mongodb.net/"
   )
   .then(() => {
     console.log("Connected to MongoDB");
@@ -131,19 +127,18 @@ app.post("/login", async (req, res) => {
 
 app.post("/addresses", async (req, res) => {
   try {
-    const {userId, address} = req.body;
+    const { userId, address } = req.body;
 
-    const user = await User.findById(userId)
+    const user = await User.findById(userId);
 
     if (!user) {
       res.status(404).json({ message: "User not found" });
     }
 
     user.addresses.push(address);
-    await user.save()
+    await user.save();
 
     res.status(200).json({ message: "Address added successfully" });
-
   } catch (err) {
     res.status(500).json({ message: "Error adding address" });
   }
@@ -158,32 +153,35 @@ app.get("/addresses/:userId", async (req, res) => {
       res.status(404).json({ message: "User not found" });
     }
     const addresses = user.addresses;
-    res.status(200).json({addresses});
-  }
-  catch {
+    res.status(200).json({ addresses });
+  } catch {
     res.status(500).json({ message: "Error retrieving addresses" });
   }
-})
-
+});
 
 app.post("/orders", async (req, res) => {
   try {
-    const { userId, cartItems, totalPrice, status, shippingAddress, paymentMethod } = req.body;
+    const {
+      userId,
+      cartItems,
+      totalPrice,
+      status,
+      shippingAddress,
+      paymentMethod,
+    } = req.body;
 
-    const user = await User.findById(userId)
+    const user = await User.findById(userId);
 
     if (!user) {
       res.status(404).json({ message: "User not found" });
     }
 
-    const products = cartItems.map((item) => (
-      {
-        name: item?.title,
-        quantity: item?.quantity,
-        price: item?.price,
-        image: item?.image,
-      }
-    ))
+    const products = cartItems.map((item) => ({
+      name: item?.title,
+      quantity: item?.quantity,
+      price: item?.price,
+      image: item?.image,
+    }));
 
     const order = new Order({
       user: userId,
@@ -192,47 +190,67 @@ app.post("/orders", async (req, res) => {
       shippingAddress: shippingAddress,
       status: status,
       paymentMethod: paymentMethod,
-    })
+    });
 
     await order.save();
-    res.status(200).json({message: "Order created successfully"});
-  }
-  catch (err) {
-    console.log("Error submitting order", err)
+    res.status(200).json({ message: "Order created successfully" });
+  } catch (err) {
+    console.log("Error submitting order", err);
     res.status(500).json({ message: "Error submitting order" });
   }
-})
+});
 
 app.get("/profile/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
     const user = await User.findById(userId);
 
-    
     if (!user) {
       res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({user});
-  }
-  catch (err) {
+    res.status(200).json({ user });
+  } catch (err) {
     res.status(500).json({ message: "Error retrieving user profile" });
   }
-})
+});
 
 app.get("/orders/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
-    const orders = await Order.find({user: userId}).populate("user");
+    const orders = await Order.find({ user: userId }).populate("user");
 
-    
     if (!orders || orders.length === 0) {
       res.status(404).json({ message: "No orders found for this user" });
     }
 
-    res.status(200).json({orders});
-  }
-  catch (err) {
+    res.status(200).json({ orders });
+  } catch (err) {
     res.status(500).json({ message: "Error retrieving orders" });
   }
-})
+});
+
+app.post("/updateOrderStatus", async (req, res) => {
+  try {
+    const { _id, status } = req.body;
+
+    console.log("HI", _id, status);  // Log inputs for debugging
+
+    // Query the Order model directly
+    const order = await Order.findOne({ _id: _id});
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });  // Ensure response is returned
+    }
+
+    console.log("Order found:", order);  // Log order details for debugging
+
+    order.status = status;
+    await order.save();  // Save the order
+
+    res.status(200).json({ message: "Order status updated successfully" });
+  } catch (err) {
+    console.error(err);  // Log error for debugging
+    res.status(500).json({ message: "Error updating order status" });
+  }
+});
