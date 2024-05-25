@@ -1,8 +1,7 @@
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import CustomNavIcon from "../components/CustomNavIcons";
 import OrderCart from "../screens/Cart";
 import Home from "../screens/Home";
 import Categories from "../screens/Categories";
@@ -54,28 +53,6 @@ const StackNavigator = () => {
                 />
               ) : (
                 <FontAwesome name="florin-sign" size={22} color={Colors.Gray} />
-              ),
-          }}
-        />
-        <Tab.Screen
-          name="Products"
-          component={Categories}
-          options={{
-            tabBarShowLabel: false,
-            headerShown: false,
-            tabBarIcon: ({ focused }) =>
-              focused ? (
-                <FontAwesome
-                  name="magnifying-glass"
-                  size={22}
-                  color={Colors.Peach}
-                />
-              ) : (
-                <FontAwesome
-                  name="magnifying-glass"
-                  size={22}
-                  color={Colors.Gray}
-                />
               ),
           }}
         />

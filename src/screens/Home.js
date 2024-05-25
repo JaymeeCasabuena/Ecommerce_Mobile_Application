@@ -203,9 +203,6 @@ const styles = StyleSheet.create({
   firstTabView: {
     height: 270,
     marginTop: 20,
-    borderBottomWidth: 0.5,
-    borderTopWidth: 0.5,
-    borderColor: Colors.Black,
   },
   secondTabView: {
     height: 600,
