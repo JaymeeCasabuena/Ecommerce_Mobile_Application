@@ -84,7 +84,7 @@ export default function SignUp() {
                     onChangeText={handleChange("userName")}
                     onBlur={handleBlur("userName")}
                     style={styles.input}
-                    placeholder="Enter your name"
+                    placeholder="Enter your full name"
                   />
                   {values.userName.length > 0 ? (
                     <TouchableOpacity

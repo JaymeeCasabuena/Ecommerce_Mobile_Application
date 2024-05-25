@@ -42,4 +42,34 @@ const handleRegister = (userName, email, password) => {
     });
 };
 
-export { handleLogin, handleRegister };
+const fetchUserProfile = async (userId) => {
+
+  try {
+    const response = await axios.get(
+      `http://10.0.2.2:8000/profile/${userId}`
+    );
+    return response.data.userProfile;
+  } catch (error) {
+    console.log("error fetching user data", error);
+  }
+};
+
+const handleProfileUpdate = (userId, userName, password) => {
+  const userUpdatedData = {
+    userId: userId,
+    name: userName,
+    password: password,
+  };
+
+  axios
+    .post("http://10.0.2.2:8000/updateProfile", userUpdatedData)
+    .then((response) => {
+      return response
+    })
+    .catch((err) => {
+      Alert.alert("Update Error", "An error occurred while updating user profile");
+      console.log("Update failed", err);
+    });
+};
+
+export { handleLogin, handleRegister, fetchUserProfile, handleProfileUpdate };
