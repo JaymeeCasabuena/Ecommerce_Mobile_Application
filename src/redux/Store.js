@@ -3,6 +3,7 @@ import cartReducer from "../redux/CartSlice";
 import productReducer from "../redux/ProductSlice";
 import previewProductsReducer from "../redux/PreviewSlice";
 import addressReducer from "./AddressSlice";
+import authenticationReducer from "./AuthenticationSlice";
 
 export const store = configureStore({
     reducer: {
@@ -10,5 +11,6 @@ export const store = configureStore({
         products: productReducer,
         previewProducts: previewProductsReducer,
         address: addressReducer,
+        authentication: authenticationReducer,
     }
 })

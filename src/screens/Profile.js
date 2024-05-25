@@ -11,18 +11,25 @@ import { Colors } from "../constants/Colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome6";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import SelectDefaultAddress from "../components/Addresses";
+import { setUserID } from "../redux/AuthenticationSlice";
+import { resetUpdate } from "../redux/CartSlice";
+import { useDispatch } from "react-redux";
 
 
 export default function UserProfile() {
   const [isShow, setShow] = useState(false);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
 
   const toggleCollapsibleContent = () => {
     setShow(!isShow);
   };
 
-  const goToLogin = () => {
-    clearAuthToken();
+  const goToLogin = async () => {
+    dispatch(resetUpdate()); 
+    dispatch(setUserID(''));
+    await clearAuthToken();
   };
 
   const clearAuthToken = async () => {

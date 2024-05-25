@@ -6,12 +6,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { fetchAddresses } from "../services/AddressService";
-import { useContext, useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import { UserType } from "../../UserContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { jwtDecode } from "jwt-decode";
-import "core-js/stable/atob";
 import { useSelector, useDispatch } from "react-redux";
 import { setDefaultAddress } from "../redux/AddressSlice";
 import MaterialIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -19,21 +15,11 @@ import Feather from "@expo/vector-icons/Feather";
 import { Colors } from "../constants/Colors";
 
 const SelectDefaultAddress = () => {
+  const { userId } = useSelector((state) => state.authentication);
   const navigation = useNavigation();
-  const { userId, setUserId } = useContext(UserType);
   const [addresses, setAddresses] = useState();
   const { defaultAddress } = useSelector((state) => state.address);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const token = await AsyncStorage.getItem("authToken");
-      const decodedToken = jwtDecode(token);
-      const userId = decodedToken.userId;
-      setUserId(userId);
-    };
-    fetchUser();
-  }, []);
 
   const loadAddresses = async () => {
     if (userId) {

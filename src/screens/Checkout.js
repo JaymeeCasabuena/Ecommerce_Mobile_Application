@@ -1,8 +1,7 @@
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { cleanCart } from "../redux/CartSlice";
-import { UserType } from "../../UserContext";
 import { Colors } from "../constants/Colors";
 import MaterialIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useSelector, useDispatch } from "react-redux";
@@ -12,7 +11,7 @@ import { handleNewOrder } from "../services/OrderService";
 export default function Checkout() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { userId, setUserId } = useContext(UserType);
+  const { userId } = useSelector((state) => state.authentication);
   const [paymentMethod, setPaymentMethod] = useState();
   const [status, setStatus] = useState();
   const { cart, totalItems, totalAmount } = useSelector((state) => state.cart);

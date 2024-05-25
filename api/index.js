@@ -37,7 +37,7 @@ const sendVerificationEmail = async (email, verificationToken) => {
     service: "gmail",
     auth: {
       user: "fakestoregu@gmail.com",
-      pass: "iyqm obhn utmt dzjd",
+      pass: "jrsy ozfk tywv vwtq",
     },
   });
   const mailOptions = {
@@ -50,7 +50,7 @@ const sendVerificationEmail = async (email, verificationToken) => {
   try {
     await transporter.sendMail(mailOptions);
   } catch (err) {
-    console.log("Error sending verification email");
+    console.log("Error sending verification email", err);
   }
 };
 
@@ -233,24 +233,53 @@ app.get("/orders/:userId", async (req, res) => {
 app.post("/updateOrderStatus", async (req, res) => {
   try {
     const { _id, status } = req.body;
-
-    console.log("HI", _id, status);  // Log inputs for debugging
-
-    // Query the Order model directly
     const order = await Order.findOne({ _id: _id});
 
     if (!order) {
-      return res.status(404).json({ message: "Order not found" });  // Ensure response is returned
+      return res.status(404).json({ message: "Order not found" });  
     }
 
-    console.log("Order found:", order);  // Log order details for debugging
-
     order.status = status;
-    await order.save();  // Save the order
+    await order.save(); 
 
     res.status(200).json({ message: "Order status updated successfully" });
   } catch (err) {
-    console.error(err);  // Log error for debugging
+    console.error(err); 
     res.status(500).json({ message: "Error updating order status" });
+  }
+});
+
+app.post("/updateCart", async (req, res) => {
+  try {
+    const { userId, totalPrice, totalItems, cartProducts } = req.body;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });  
+    }
+
+    user.cart.totalPrice = totalPrice;
+    user.cart.totalItems = totalItems;
+    user.cart.cartProducts = cartProducts;
+    await user.save(); 
+    res.status(200).json({ message: "Cart updated successfully" });
+  } catch (err) {
+    console.error(err); 
+    res.status(500).json({ message: "Error updating cart" });
+  }
+});
+
+app.get("/cart/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+    }
+
+    const cart = user.cart
+    res.status(200).json({ cart });
+  } catch (err) {
+    res.status(500).json({ message: "Error retrieving cart data" });
   }
 });

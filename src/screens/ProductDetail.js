@@ -3,12 +3,15 @@ import { Colors } from "../constants/Colors";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import StarRating from "../components/StarRating";
 import { useRoute, useNavigation } from "@react-navigation/native";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/CartSlice";
 import CustomModal from "../components/CustomModal";
+import { handleCartUpdate } from "../services/CartService";
 
 export default function ProductDetails() {
+  const { userId } = useSelector((state) => state.authentication);
+  const { cart, totalAmount, totalItems } = useSelector((state) => state.cart);
   const route = useRoute();
   const navigation = useNavigation();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -29,6 +32,10 @@ export default function ProductDetails() {
     dispatch(addToCart(product));
     setIsModalVisible(true);
   };
+
+  useEffect(() => {
+    handleCartUpdate(userId, totalAmount, totalItems, cart);
+  }, [cart, totalAmount, totalItems, userId]);
 
   const closeModal = () => {
     setIsModalVisible(false);

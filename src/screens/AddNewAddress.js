@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Colors } from "../constants/Colors";
-import { useContext, useEffect, useState } from "react";
-import { UserType } from "../../UserContext";
+import {  useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "@expo/vector-icons/FontAwesome6";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -17,7 +17,7 @@ import { handleAddingNewAddress } from "../services/AddressService";
 
 const AddNewAddress = () => {
   const navigation = useNavigation();
-  const { userId, setUserId } = useContext(UserType);
+  const { userId } = useSelector((state) => state.authentication)
   const [fullName, setFullName] = useState();
   const [mobileNo, setMobileNo] = useState();
   const [street, setStreet] = useState();

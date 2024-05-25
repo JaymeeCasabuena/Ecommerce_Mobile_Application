@@ -9,6 +9,9 @@ import {
 } from "react-native";
 import React from "react";
 import { useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
+import "core-js/stable/atob";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Colors } from "../constants/Colors";
 import { BackgroundImages } from "../constants/BackgroundImages";
 import { TabView, SceneMap } from "react-native-tab-view";
@@ -20,13 +23,36 @@ import {
   loadPreviewProducts,
   selectPreviewProducts,
 } from "../redux/PreviewSlice";
+import { loadCartData, isUpdated } from "../redux/CartSlice";
+import { setUserID } from "../redux/AuthenticationSlice";
 
 export default function Home() {
+  const { userId } = useSelector((state) => state.authentication);
   const navigation = useNavigation();
+  const { update } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
-  const { previewProducts, loading, error } = useSelector(
-    selectPreviewProducts
-  );
+  const { previewProducts, loading } = useSelector(selectPreviewProducts);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = await AsyncStorage.getItem("authToken");
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        const userId = decodedToken.userId;
+        dispatch(setUserID(userId));
+      } else {
+        dispatch(setUserID(null));
+      }
+    };
+    fetchUser();
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (userId && !update) {
+      dispatch(loadCartData(userId));
+      dispatch(isUpdated());
+    } 
+  }, [userId, update, dispatch]);
 
   useEffect(() => {
     dispatch(loadPreviewProducts());

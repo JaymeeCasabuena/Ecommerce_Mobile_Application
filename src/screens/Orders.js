@@ -7,8 +7,8 @@ import {
   FlatList,
 } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import { useState, useEffect, useCallback, useContext } from "react";
-import { UserType } from "../../UserContext";
+import { useState, useEffect, useCallback } from "react";
+import { useSelector } from "react-redux";
 import { Colors } from "../constants/Colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome6";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -16,7 +16,7 @@ import { fetchOrders } from "../services/OrderService";
 
 export default function OrdersScreen() {
   const [orders, setOrders] = useState();
-  const { userId, setUserId } = useContext(UserType);
+  const { userId } = useSelector((state) => state.authentication);
   const [collapsed, setCollapsed] = useState(false);
   const navigation = useNavigation();
 

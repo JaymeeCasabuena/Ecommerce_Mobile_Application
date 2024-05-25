@@ -21,10 +21,10 @@ export default function SignUp() {
   const [userName, setName] = useState("");
 
   const registerUser = () => {
-    handleRegister(email, password, userName);
-    setName("");
-    setEmail("");
-    setPassword("");
+    handleRegister(userName, email, password);
+    // setName("");
+    // setEmail("");
+    // setPassword("");
   };
 
   return (

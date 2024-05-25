@@ -1,10 +1,26 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { fetchCartData } from "../services/CartService";
 
 const initialState = {
   cart: [],
   totalAmount: 0,
   totalItems: 0,
+  cartLoading: false,
+  error: null,
+  update: false,
 };
+
+export const loadCartData = createAsyncThunk(
+  "loadCartData",
+  async (userId, thunkAPI) => {
+    try {
+      const res = await fetchCartData(userId);
+      return res;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
 
 export const cartSlice = createSlice({
   name: "cart",
@@ -58,10 +74,35 @@ export const cartSlice = createSlice({
       state.totalAmount = 0;
       state.totalItems = 0;
     },
+    isUpdated: (state) => {
+      state.update = true;
+    },
+    resetUpdate: (state) => {
+      state.update = false;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(loadCartData.pending, (state) => {
+        state.cartLoading = true;
+        state.error = null;
+      })
+      .addCase(loadCartData.fulfilled, (state, action) => {
+        state.cartLoading = false;
+        state.error = null;
+        state.cart = action.payload.cartProducts;
+        state.totalAmount = action.payload.totalPrice;
+        state.totalItems = action.payload.totalItems;
+      })
+      .addCase(loadCartData.rejected, (state, action) => {
+        state.cartLoading = false;
+        state.error = action.payload;
+        state.cart = [];
+      });
   },
 });
 
-export const { addToCart, increment, decrement, removeItem, cleanCart } =
+export const { addToCart, increment, decrement, removeItem, cleanCart, isUpdated, resetUpdate } =
   cartSlice.actions;
 
 export default cartSlice.reducer;

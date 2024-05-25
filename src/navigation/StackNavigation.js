@@ -22,7 +22,7 @@ import { useSelector } from "react-redux";
 const StackNavigator = () => {
   const Stack = createStackNavigator();
   const Tab = createBottomTabNavigator();
-  const { totalItems } = useSelector((state) => state.cart);
+  const { totalItems, cartLoading } = useSelector((state) => state.cart);
 
   function BottomTabs() {
     return (
@@ -85,7 +85,7 @@ const StackNavigator = () => {
           options={{
             tabBarShowLabel: false,
             headerShown: false,
-            tabBarBadge: totalItems ? totalItems : null,
+            tabBarBadge: !cartLoading ? (totalItems || null) : null,
             tabBarIcon: ({ focused }) =>
               focused ? (
                 <FontAwesome

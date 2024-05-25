@@ -9,14 +9,21 @@ import {
 import { Colors } from "../constants/Colors";
 import Feather from "@expo/vector-icons/Feather";
 import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { handleCartUpdate } from "../services/CartService";
 import { increment, decrement, removeItem } from "../redux/CartSlice";
 import { useNavigation } from "@react-navigation/native";
 
 export default function OrderCart() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const { userId } = useSelector((state) => state.authentication);
   const { cart, totalAmount, totalItems } = useSelector((state) => state.cart);
   const total = totalAmount.toFixed(2);
+
+  useEffect(() => {
+    handleCartUpdate(userId, totalAmount, totalItems, cart);
+  }, [cart, totalAmount, totalItems, userId]);
 
   const renderItem = ({ item }) => (
     <View style={styles.productContainer}>
