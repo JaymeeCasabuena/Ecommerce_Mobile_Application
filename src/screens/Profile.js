@@ -89,12 +89,10 @@ export default function UserProfile() {
 
   const submitUpdate = async (values) => {
     try {
-      console.log(values, userId);
       await handleProfileUpdate(userId, values.userName, values.password);
       setIsModalVisible(true);
       await loadUserProfile();
     } catch (error) {
-      console.log("ERROR");
       console.error(error);
     }
   };
@@ -189,9 +187,6 @@ export default function UserProfile() {
                     </TouchableOpacity>
                   ) : null}
                 </View>
-                {errors.userName && touched.userName && (
-                  <Text style={styles.errorText}>{errors.userName}</Text>
-                )}
                 <View style={styles.inputWrapper}>
                   <Text style={[styles.input, styles.disabled]}>
                     {userDetails?.email}
@@ -220,6 +215,9 @@ export default function UserProfile() {
                     </TouchableOpacity>
                   ) : null}
                 </View>
+                {errors.userName && touched.userName && (
+                  <Text style={styles.errorText}>{errors.userName}</Text>
+                )}
                 {errors.password && touched.password && (
                   <Text style={styles.errorText}>{errors.password}</Text>
                 )}

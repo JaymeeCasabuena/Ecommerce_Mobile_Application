@@ -4,12 +4,13 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { useCallback } from "react";
 import { Provider } from "react-redux";
-import { store } from "./src/redux/Store";
+import { PersistGate } from "redux-persist/integration/react";
+import { store, persistor } from "./src/redux/Store";
 import StackNavigator from "./src/navigation/StackNavigation";
 
 export default function App() {
   SplashScreen.preventAutoHideAsync();
-  setTimeout(SplashScreen.hideAsync, 2000);
+  setTimeout(SplashScreen.hideAsync, 500);
 
   const [fontsLoaded] = useFonts({
     "Poppins-Light": require("./assets/Fonts/Poppins-Light.ttf"),
@@ -22,7 +23,7 @@ export default function App() {
 
   const handleOnLayout = useCallback(async () => {
     if (fontsLoaded) {
-      await SplashScreen.hideAsync(); //hide the splashscreen
+      await SplashScreen.hideAsync();
     }
   }, [fontsLoaded]);
 
@@ -32,7 +33,9 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <StackNavigator />
+      <PersistGate loading={null} persistor={persistor}>
+        <StackNavigator />
+      </PersistGate>
     </Provider>
   );
 }
