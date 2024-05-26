@@ -5,6 +5,7 @@ import {
   TextInput,
   ImageBackground,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../constants/Colors";
@@ -18,8 +19,6 @@ import * as Yup from "yup";
 export default function SignIn() {
   const backgroundImage = require("../../assets/BackgroundImages/LoginScreen.jpg");
   const navigation = useNavigation();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
   const goToSignupPage = () => {
     navigation.navigate("Sign up");
@@ -31,7 +30,7 @@ export default function SignIn() {
         const token = await AsyncStorage.getItem("authToken");
 
         if (token) {
-          navigation.replace("Main");
+          navigation.replace("MainStack");
         }
       } catch (err) {
         console.log("error message", err);
@@ -40,8 +39,21 @@ export default function SignIn() {
     checkLoginStatus();
   }, []);
 
-  const login = (values) => {
-    handleLogin(values.email, values.password, navigation);
+  const login = async (values) => {
+    try {
+      const response = await handleLogin(values.email, values.password);
+      if (response.status === 403) {
+        return;
+      }
+      navigation.replace("MainStack");
+    } catch (error) {
+      if (error.response && error.response.status === 403) {
+        Alert.alert("Login Error", "Your account is not verified");
+      } else {
+        Alert.alert("Login Error", "Wrong email or password");
+      }
+      console.error("Login failed", error);
+    }
   };
 
   const validationSchema = Yup.object().shape({
@@ -213,9 +225,9 @@ const styles = StyleSheet.create({
     color: Colors.Red,
   },
   inputWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   clearButton: {
     marginRight: -24,
@@ -223,7 +235,7 @@ const styles = StyleSheet.create({
     right: 30,
   },
   disabledButton: {
-    backgroundColor: Colors.Gray
+    backgroundColor: Colors.Gray,
   },
   signupButton: {
     marginTop: 10,

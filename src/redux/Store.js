@@ -6,6 +6,7 @@ import productReducer from "../redux/ProductSlice";
 import previewProductsReducer from "../redux/PreviewSlice";
 import addressReducer from "./AddressSlice";
 import authenticationReducer from "./AuthenticationSlice";
+import newOrderReducer from "./NewOrderSlice"
 
 const rootReducer = combineReducers({
     cart: cartReducer,
@@ -13,12 +14,13 @@ const rootReducer = combineReducers({
     previewProducts: previewProductsReducer,
     address: addressReducer,
     authentication: authenticationReducer,
+    newOrder: newOrderReducer,
   });
 
 const persistConfig = {
     key: 'root',
     storage: AsyncStorage,
-    whitelist: ['previewProducts', 'products'] 
+    whitelist: ['previewProducts'] 
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

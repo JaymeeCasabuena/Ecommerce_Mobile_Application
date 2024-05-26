@@ -19,7 +19,7 @@ export default function OrderCart() {
   const dispatch = useDispatch();
   const { userId } = useSelector((state) => state.authentication);
   const { cart, totalAmount, totalItems } = useSelector((state) => state.cart);
-  const total = totalAmount.toFixed(2);
+  const total = totalAmount?.toFixed(2);
 
   useEffect(() => {
     handleCartUpdate(userId, totalAmount, totalItems, cart);
@@ -64,7 +64,7 @@ export default function OrderCart() {
 
   return (
     <View style={styles.container}>
-      {totalItems < 1 ? (
+      {totalItems === 0 || totalItems === undefined ? (
         <Text style={styles.emptyCart}> Your bag is empty </Text>
       ) : (
         <View style={styles.cartContainer}>

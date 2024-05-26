@@ -18,6 +18,7 @@ const SelectDefaultAddress = () => {
   const { userId } = useSelector((state) => state.authentication);
   const navigation = useNavigation();
   const [addresses, setAddresses] = useState();
+  const [selectedAddress, setSelected] = useState();
   const { defaultAddress } = useSelector((state) => state.address);
   const dispatch = useDispatch();
 
@@ -25,6 +26,9 @@ const SelectDefaultAddress = () => {
     if (userId) {
       const fetchedAddresses = await fetchAddresses(userId);
       setAddresses(fetchedAddresses);
+      const [initialValue] = fetchedAddresses.slice(0, 1);
+      dispatch(setDefaultAddress(initialValue));
+      setSelected(initialValue);
     }
   };
 
@@ -42,20 +46,23 @@ const SelectDefaultAddress = () => {
     navigation.navigate("Add New Address");
   };
 
+  const selectAddress = (item) => {
+    if (item != selectAddress) dispatch(setDefaultAddress(item));
+  };
 
-  return (
+  return addresses?.length > 0 ? (
     <View style={styles.scrollView}>
       <FlatList
         data={addresses?.sort(
           (a, b) =>
-            (b._id === defaultAddress._id ? 1 : 0) -
-            (a._id === defaultAddress._id ? 1 : 0)
+            (b._id === defaultAddress?._id ? 1 : 0) -
+            (a._id === defaultAddress?._id ? 1 : 0)
         )}
         renderItem={({ item }) => (
           <View key={addresses._id} style={styles.addressContainer}>
             <TouchableOpacity
               style={styles.addressButton}
-              onPress={() => dispatch(setDefaultAddress(item))}
+              onPress={() => selectAddress(item)}
             >
               {defaultAddress && defaultAddress._id === item?._id ? (
                 <MaterialIcons
@@ -75,7 +82,7 @@ const SelectDefaultAddress = () => {
               <View style={styles.addressTab}>
                 {defaultAddress && defaultAddress._id === item?._id ? (
                   <Text style={[styles.addressDetails, styles.defaultText]}>
-                    Default Address
+                    Selected Address
                   </Text>
                 ) : null}
                 <Text style={styles.addressDetails}>{item.street}</Text>
@@ -95,7 +102,28 @@ const SelectDefaultAddress = () => {
         style={styles.addButton}
         onPress={() => goToAddAddress()}
       >
-        <Feather style={styles.icons} name="plus" size={20} color={Colors.PurplishBlue} />
+        <Feather
+          style={styles.icons}
+          name="plus"
+          size={20}
+          color={Colors.PurplishBlue}
+        />
+        <Text style={styles.addressDetails}>Add a new address</Text>
+      </TouchableOpacity>
+    </View>
+  ) : (
+    <View style={styles.scrollView}>
+      <Text style={styles.header}>No saved address yet</Text>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => goToAddAddress()}
+      >
+        <Feather
+          style={styles.icons}
+          name="plus"
+          size={20}
+          color={Colors.PurplishBlue}
+        />
         <Text style={styles.addressDetails}>Add a new address</Text>
       </TouchableOpacity>
     </View>
@@ -110,6 +138,14 @@ const styles = StyleSheet.create({
     width: 350,
     height: 240,
     backgroundColor: Colors.White,
+  },
+  header: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 25,
+    color: Colors.Black,
+    marginLeft: 30,
+    marginTop: 30,
+    marginBottom: 120,
   },
   addressButton: {
     flexDirection: "row",

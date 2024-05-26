@@ -23,7 +23,6 @@ const handleNewOrder = (
   axios
     .post("http://10.0.2.2:8000/orders", orderData)
     .then((response) => {
-      Alert.alert("Success", "Order created successfully");
       return response;
     })
     .catch((err) => {
@@ -38,7 +37,7 @@ const fetchOrders = async (userId) => {
     const response = await axios.get(`http://10.0.2.2:8000/orders/${userId}`);
     return response.data.orders;
   } catch (error) {
-    console.log("error fetching addresses", error);
+    console.log("error fetching orders", error);
   }
 };
 
@@ -52,7 +51,6 @@ const handleUpdateStatus = async (orderId, status) => {
   axios
     .post("http://10.0.2.2:8000/updateOrderStatus", updateData)
     .then((response) => {
-      Alert.alert("Success", "Order status updated successfully");
       return response;
     })
     .catch((err) => {

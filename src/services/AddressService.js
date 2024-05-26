@@ -22,7 +22,6 @@ const handleAddingNewAddress = (
   axios
     .post("http://10.0.2.2:8000/addresses", { userId, address })
     .then((response) => {
-      Alert.alert("Success", "Address added successfully");
       return response;
     })
     .catch((err) => {

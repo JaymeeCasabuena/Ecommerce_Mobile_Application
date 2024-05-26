@@ -4,7 +4,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import OrderCart from "../screens/Cart";
 import Home from "../screens/Home";
-import Categories from "../screens/Categories";
 import Checkout from "../screens/Checkout";
 import ProductList from "../screens/ProductList";
 import SignIn from "../screens/Login";
@@ -23,12 +22,34 @@ const StackNavigator = () => {
   const Tab = createBottomTabNavigator();
   const { totalItems, cartLoading } = useSelector((state) => state.cart);
 
+  function Products() {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ProductList"
+          component={ProductList}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Order Cart"
+          component={OrderCart}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    );
+  }
+
   function BottomTabs() {
     return (
       <Tab.Navigator>
         <Tab.Screen
-          name="Home"
-          component={Home}
+          name="Main"
+          component={Products}
           options={{
             headerShown: true,
             headerTitle: "Fake Store",
@@ -62,7 +83,7 @@ const StackNavigator = () => {
           options={{
             tabBarShowLabel: false,
             headerShown: false,
-            tabBarBadge: !cartLoading ? (totalItems || null) : null,
+            tabBarBadge: !cartLoading ? totalItems || null : null,
             tabBarIcon: ({ focused }) =>
               focused ? (
                 <FontAwesome
@@ -122,13 +143,8 @@ const StackNavigator = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Main"
+          name="MainStack"
           component={BottomTabs}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ProductList"
-          component={ProductList}
           options={{ headerShown: false }}
         />
         <Stack.Screen

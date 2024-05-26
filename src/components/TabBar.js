@@ -7,8 +7,8 @@ import { TabBar } from "react-native-tab-view";
 const renderTabBar = (props) => (
     <TabBar
       {...props}
-      indicatorStyle={{ backgroundColor: Colors.DarkestBlue }}
-      style={{ backgroundColor: "transparent", color: Colors.DarkestBlue, marginTop: 10 }}
+      indicatorStyle={{ backgroundColor: Colors.Peach }}
+      style={{ backgroundColor: Colors.PurplishBlue, color: Colors.White, marginTop: 10 }}
       renderLabel={({ route, focused }) => (
         <Text style={styles.tabText}>{route.title}</Text>
       )}
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     tabText: {
       fontSize: 12,
       fontFamily: 'Poppins-SemiBold',
-      color: Colors.PurplishBlue,
+      color: Colors.White,
       textTransform: "capitalize",
     }
   });

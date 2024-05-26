@@ -135,13 +135,13 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 14,
-    fontFamily: "Lato-Bold",
+    fontFamily: "Poppins-SemiBold",
     color: Colors.Peach,
     letterSpacing: 8,
   },
   storeName: {
     fontSize: 14,
-    fontFamily: "Lato-Bold",
+    fontFamily: "Poppins-SemiBold",
     padding: 10,
     marginTop: 10,
     color: Colors.DarkestBlue,
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   },
   productName: {
     fontSize: 14,
-    fontFamily: "Lato-Bold",
+    fontFamily: "Poppins-SemiBold",
     padding: 10,
     paddingTop: 0,
     marginTop: 2,
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
   },
   productPrice: {
     fontSize: 17,
-    fontFamily: "Lato-Bold",
+    fontFamily: "Poppins-SemiBold",
     padding: 10,
     padding: 10,
     paddingTop: 0,
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   },
   productRating: {
     fontSize: 14,
-    fontFamily: "Lato-Bold",
+    fontFamily: "Poppins-SemiBold",
     padding: 10,
     paddingTop: 0,
     marginTop: 2,
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   },
   productSold: {
     fontSize: 14,
-    fontFamily: "Lato-Bold",
+    fontFamily: "Poppins-SemiBold",
     padding: 10,
     paddingTop: 0,
     marginTop: 2,
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
   },
   productDescription: {
     fontSize: 12,
-    fontFamily: "Lato-Regular",
+    fontFamily: "Poppins-Regular",
     padding: 10,
     paddingTop: 20,
     color: Colors.White,

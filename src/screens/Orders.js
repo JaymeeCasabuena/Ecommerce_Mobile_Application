@@ -15,6 +15,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { fetchOrders } from "../services/OrderService";
 
 export default function OrdersScreen() {
+  const { newOrders } = useSelector((state) => state.newOrder);
   const [orders, setOrders] = useState();
   const { userId } = useSelector((state) => state.authentication);
   const [collapsed, setCollapsed] = useState(false);
@@ -72,6 +73,7 @@ export default function OrdersScreen() {
       >
         <MaterialIcons style={styles.icons} size={18} name="payment" />
         <Text style={styles.buttonName}>Awaiting Payment</Text>
+        {newOrders > 0 ? (<Text style={styles.badge}>{newOrders}</Text>) : null}
         {collapsed === "firstTab" ? (
           <MaterialIcons
             style={[styles.caretIcon, styles.caretDown]}
@@ -103,7 +105,10 @@ export default function OrdersScreen() {
                     {item.products.length > 1 ? " items" : " item"}
                   </Text>
                   <Text style={styles.subHeaders}> - ${item.totalPrice}</Text>
-                  <MaterialIcons style={styles.caretIcon} name="keyboard-arrow-right" />
+                  <MaterialIcons
+                    style={styles.caretIcon}
+                    name="keyboard-arrow-right"
+                  />
                 </View>
                 <View style={styles.imagesRow}>
                   {item.products.slice(0, 3).map((product, productIndex) => (
@@ -157,7 +162,10 @@ export default function OrdersScreen() {
                     {item.products.length > 1 ? " items" : " item"}
                   </Text>
                   <Text style={styles.subHeaders}> - ${item.totalPrice}</Text>
-                  <MaterialIcons style={styles.caretIcon} name="keyboard-arrow-right" />
+                  <MaterialIcons
+                    style={styles.caretIcon}
+                    name="keyboard-arrow-right"
+                  />
                 </View>
                 <View style={styles.imagesRow}>
                   {item.products.slice(0, 3).map((product, productIndex) => (
@@ -211,7 +219,10 @@ export default function OrdersScreen() {
                     {item.products.length > 1 ? " items" : " item"}
                   </Text>
                   <Text style={styles.subHeaders}> - ${item.totalPrice}</Text>
-                  <MaterialIcons style={styles.caretIcon} name="keyboard-arrow-right" />
+                  <MaterialIcons
+                    style={styles.caretIcon}
+                    name="keyboard-arrow-right"
+                  />
                 </View>
                 <View style={styles.imagesRow}>
                   {item.products.slice(0, 3).map((product, productIndex) => (
@@ -354,4 +365,16 @@ const styles = StyleSheet.create({
     color: Colors.Black,
     marginLeft: 20,
   },
+  badge: {
+    position: 'absolute',
+    backgroundColor: "red",
+    borderRadius: 20,
+    width: 20,
+    height: 20,
+    right: 180,
+    top: 15,
+    color: Colors.White,
+    alignSelf: 'center',
+    textAlign: 'center',
+  }
 });

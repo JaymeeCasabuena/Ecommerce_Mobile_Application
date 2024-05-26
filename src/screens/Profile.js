@@ -22,6 +22,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 
 export default function UserProfile() {
+  const { newOrders } = useSelector((state) => state.newOrder);
   const { userId } = useSelector((state) => state.authentication);
   const [userDetails, setUserDetails] = useState();
   const [initialFormValues, setInitialFormValues] = useState({
@@ -99,9 +100,7 @@ export default function UserProfile() {
 
   const closeModal = () => {
     setIsModalVisible(false);
-    setTimeout(() => {
-      closeForm();
-    }, 500);
+    closeForm();
   };
 
   return (
@@ -138,6 +137,8 @@ export default function UserProfile() {
           >
             <FontAwesome size={18} name="bag-shopping" />
             <Text style={styles.buttonName}>My Orders</Text>
+            {newOrders > 0 ? (<Text style={styles.badge}>{newOrders}</Text>) : null}
+            {}
           </TouchableOpacity>
           <TouchableOpacity style={styles.subButton} onPress={() => flip()}>
             <FontAwesome size={18} name="key" />
@@ -387,11 +388,26 @@ const styles = StyleSheet.create({
     padding: 5,
     marginRight: 10,
   },
+  disabledButton: {
+    color: Colors.Gray,
+  },
   update: {
     fontSize: 14,
     color: Colors.Black,
   },
   disabled: {
     color: Colors.Gray,
+  },
+  badge: {
+    position: "absolute",
+    backgroundColor: "red",
+    borderRadius: 20,
+    width: 20,
+    height: 20,
+    right: 215,
+    top: 0,
+    color: Colors.White,
+    alignSelf: "center",
+    textAlign: "center",
   },
 });

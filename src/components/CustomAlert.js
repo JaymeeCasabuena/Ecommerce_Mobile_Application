@@ -45,14 +45,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   icon: {
-    color: "green",
+    color: Colors.Peach,
     margin: 20,
     marginBottom: 0,
   },
   modalText: {
     fontFamily: "Poppins-SemiBold",
     fontSize: 14,
-    color: Colors.Peach,
+    color: Colors.DarkestBlue,
     marginTop: 20,
   },
   modalButton: {

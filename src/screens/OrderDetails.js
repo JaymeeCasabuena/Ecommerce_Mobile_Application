@@ -8,24 +8,42 @@ import {
 } from "react-native";
 import { Colors } from "../constants/Colors";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { handleUpdateStatus } from "../services/OrderService";
+import { decrementNewOrderNumbers } from "../redux/NewOrderSlice";
+import CustomAlert from "../components/CustomAlert";
 
 export default function OrderDetails() {
+  const dispatch = useDispatch();
   const route = useRoute();
   const navigation = useNavigation();
-  const { orderNumber, orderProducts, orderItems, orderPrice, orderStatus, orderId } =
-    route.params || {};
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const {
+    orderNumber,
+    orderProducts,
+    orderItems,
+    orderPrice,
+    orderStatus,
+    orderId,
+  } = route.params || {};
 
   const updateStatus = async () => {
     const status = orderStatus === "paid" ? "delivered" : "paid";
     try {
       await handleUpdateStatus(orderId, status);
-      setTimeout(() => {
-        navigation.goBack();
-      }, 500);
+      setIsModalVisible(true);
+      if (orderStatus === 'pending') {
+        dispatch(decrementNewOrderNumbers());
+      }
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+    navigation.goBack();
   };
 
   const renderItem = ({ item }) => (
@@ -68,12 +86,22 @@ export default function OrderDetails() {
           <Text style={styles.text}>
             {orderStatus === "paid" ? "Mark as delivered" : "Pay Now"}
           </Text>
+          <CustomAlert
+            message={
+              orderStatus === "pending"
+                ? "Order Payment Successful"
+                : orderStatus === "paid"
+                ? "Order Received"
+                : null
+            }
+            buttonName={"OK"}
+            isVisible={isModalVisible}
+            onClose={closeModal}
+          />
         </TouchableOpacity>
       ) : (
         <View style={styles.button} onPress={() => updateStatus()}>
-          <Text style={styles.text}>
-            Received
-          </Text>
+          <Text style={styles.text}>Received</Text>
         </View>
       )}
     </View>

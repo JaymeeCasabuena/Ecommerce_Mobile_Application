@@ -117,6 +117,10 @@ app.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid password" });
     }
 
+    if (!user.verified) {
+      return res.status(403).json({ message: "Account not verified" });
+    }
+
     const token = jwt.sign({ userId: user._id }, secretKey);
 
     res.status(200).json({ token });
@@ -213,14 +217,13 @@ app.get("/profile/:userId", async (req, res) => {
       fullName: user.name,
       email: user.email,
       password: user.password,
-    }
+    };
 
     res.status(200).json({ userProfile });
   } catch (err) {
     res.status(500).json({ message: "Error retrieving user profile" });
   }
 });
-
 
 app.post("/updateProfile", async (req, res) => {
   try {
@@ -233,9 +236,9 @@ app.post("/updateProfile", async (req, res) => {
 
     user.name = name;
     user.password = password;
-    await user.save(); 
+    await user.save();
 
-    res.status(200).json({message: "User profile updated successfully" });
+    res.status(200).json({ message: "User profile updated successfully" });
   } catch (err) {
     res.status(500).json({ message: "Error updating user profile" });
   }
@@ -247,7 +250,7 @@ app.get("/orders/:userId", async (req, res) => {
     const orders = await Order.find({ user: userId }).populate("user");
 
     if (!orders || orders.length === 0) {
-      res.status(404).json({ message: "No orders found for this user" });
+      return res.status(200).json({ orders: [] });
     }
 
     res.status(200).json({ orders });
@@ -259,18 +262,18 @@ app.get("/orders/:userId", async (req, res) => {
 app.post("/updateOrderStatus", async (req, res) => {
   try {
     const { _id, status } = req.body;
-    const order = await Order.findOne({ _id: _id});
+    const order = await Order.findOne({ _id: _id });
 
     if (!order) {
-      return res.status(404).json({ message: "Order not found" });  
+      return res.status(404).json({ message: "Order not found" });
     }
 
     order.status = status;
-    await order.save(); 
+    await order.save();
 
     res.status(200).json({ message: "Order status updated successfully" });
   } catch (err) {
-    console.error(err); 
+    console.error(err);
     res.status(500).json({ message: "Error updating order status" });
   }
 });
@@ -281,16 +284,16 @@ app.post("/updateCart", async (req, res) => {
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });  
+      return res.status(404).json({ message: "User not found" });
     }
 
     user.cart.totalPrice = totalPrice;
     user.cart.totalItems = totalItems;
     user.cart.cartProducts = cartProducts;
-    await user.save(); 
+    await user.save();
     res.status(200).json({ message: "Cart updated successfully" });
   } catch (err) {
-    console.error(err); 
+    console.error(err);
     res.status(500).json({ message: "Error updating cart" });
   }
 });
@@ -299,11 +302,19 @@ app.get("/cart/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
     const user = await User.findById(userId);
-    if (!user) {
-      res.status(404).json({ message: "User not found" });
+    const cart = user.cart;
+
+    if (
+      !cart ||
+      (cart.cartProducts.length === 0)
+    ) {
+      return res
+        .status(200)
+        .json({
+          cart: { totalPrice: 0, totalItems: 0, cartProducts: [] },
+        });
     }
 
-    const cart = user.cart
     res.status(200).json({ cart });
   } catch (err) {
     res.status(500).json({ message: "Error retrieving cart data" });

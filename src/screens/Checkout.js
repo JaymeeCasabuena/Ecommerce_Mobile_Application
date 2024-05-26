@@ -6,7 +6,9 @@ import { Colors } from "../constants/Colors";
 import MaterialIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useSelector, useDispatch } from "react-redux";
 import SelectDefaultAddress from "../components/Addresses";
+import { incrementNewOrderNumbers } from "../redux/NewOrderSlice";
 import { handleNewOrder } from "../services/OrderService";
+import CustomAlert from "../components/CustomAlert";
 
 export default function Checkout() {
   const navigation = useNavigation();
@@ -14,6 +16,7 @@ export default function Checkout() {
   const { userId } = useSelector((state) => state.authentication);
   const [paymentMethod, setPaymentMethod] = useState();
   const [status, setStatus] = useState();
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const { cart, totalItems, totalAmount } = useSelector((state) => state.cart);
   const { defaultAddress } = useSelector((state) => state.address);
   const total = totalAmount.toFixed(2);
@@ -21,26 +24,37 @@ export default function Checkout() {
   const selectedOption = (method) => {
     if (method === "credit card") {
       setStatus("paid");
-    }
-    else {
+    } else {
       setStatus("pending");
     }
-    setPaymentMethod(method)
+    setPaymentMethod(method);
   };
 
   const placeOrder = async () => {
     try {
-      await handleNewOrder(userId, cart, total, status, defaultAddress, paymentMethod);
-      setPaymentMethod('');
-      setStatus('');
+      await handleNewOrder(
+        userId,
+        cart,
+        total,
+        status,
+        defaultAddress,
+        paymentMethod
+      );
+      setPaymentMethod("");
+      setStatus("");
+      setIsModalVisible(true);
       dispatch(cleanCart());
-      setTimeout(() => {
-        navigation.goBack();
-      }, 500);
-    }
-    catch (err) {
+      if (paymentMethod === "pay later") {
+        dispatch(incrementNewOrderNumbers());
+      }
+    } catch (err) {
       console.error(error);
     }
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+    navigation.goBack();
   };
 
   return (
@@ -111,6 +125,14 @@ export default function Checkout() {
       </View>
       <TouchableOpacity style={styles.orderButton} onPress={() => placeOrder()}>
         <Text style={[styles.headers, styles.btnText]}>Place your order</Text>
+        <CustomAlert
+          message={
+            "              Order Successful!\n Thank you for shopping with us!"
+          }
+          buttonName={"OK"}
+          isVisible={isModalVisible}
+          onClose={closeModal}
+        />
       </TouchableOpacity>
     </View>
   );
@@ -200,5 +222,6 @@ const styles = StyleSheet.create({
     color: Colors.Peach,
     fontSize: 16,
     padding: 0,
+    marginTop: 7,
   },
 });

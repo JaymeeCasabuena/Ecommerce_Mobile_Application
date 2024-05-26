@@ -19,6 +19,10 @@ import { noTabBar, renderTabBar } from "../components/TabBar";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
+import { setNewOrderNumbers } from "../redux/NewOrderSlice";
+import { fetchOrders } from "../services/OrderService";
+import Entypo from "@expo/vector-icons/Entypo";
+import FontAwesome from "@expo/vector-icons/FontAwesome6";
 import {
   loadPreviewProducts,
   selectPreviewProducts,
@@ -27,10 +31,10 @@ import { loadCartData, isUpdated } from "../redux/CartSlice";
 import { setUserID } from "../redux/AuthenticationSlice";
 
 export default function Home() {
+  const dispatch = useDispatch();
   const { userId } = useSelector((state) => state.authentication);
   const navigation = useNavigation();
-  const { update } = useSelector((state) => state.cart);
-  const dispatch = useDispatch();
+  const { update, cart, totalItems } = useSelector((state) => state.cart);
   const { previewProducts, loading } = useSelector(selectPreviewProducts);
 
   useEffect(() => {
@@ -51,12 +55,23 @@ export default function Home() {
     if (userId && !update) {
       dispatch(loadCartData(userId));
       dispatch(isUpdated());
-    } 
+    }
   }, [userId, update, dispatch]);
 
   useEffect(() => {
     dispatch(loadPreviewProducts());
   }, [dispatch]);
+
+  useEffect(() => {
+    const loadOrders = async () => {
+      if (userId) {
+        const fetchedOrders = await fetchOrders(userId);
+        const newOrders = fetchedOrders?.filter((order) => order.status === "pending");
+        dispatch(setNewOrderNumbers(newOrders?.length));
+      }
+    };
+    loadOrders();
+  }, [userId]); 
 
   const goToCategoryScreen = (category) => {
     navigation.navigate("ProductList", category);
@@ -175,6 +190,19 @@ export default function Home() {
           renderTabBar={renderTabBar}
         />
       </View>
+      <View style={styles.socials}>
+        <Text style={styles.header}>Follow us on:</Text>
+        <View style={styles.apps}>
+          <Entypo name={"facebook"} size={30} style={styles.icons} />
+          <Entypo name={"instagram"} size={30} style={styles.icons} />
+          <FontAwesome
+            name={"square-x-twitter"}
+            size={33}
+            style={styles.icons}
+          />
+        </View>
+        <Text style={[styles.header, {fontSize: 8}]}>This app is made and designed by Jaymee</Text>
+      </View>
     </ScrollView>
   );
 }
@@ -198,14 +226,15 @@ const styles = StyleSheet.create({
   backgroundImage: {
     position: "absolute",
     width: "100%",
-    height: 300,
+    height: 320,
   },
   firstTabView: {
     height: 270,
     marginTop: 20,
   },
   secondTabView: {
-    height: 600,
+    height: 540,
+    marginTop: -10,
   },
   tabPage: {
     flexDirection: "column",
@@ -213,13 +242,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "transparent",
     height: 300,
-  },
-  tabText: {
-    fontSize: 12,
-    fontFamily: "Lato-Bold",
-    color: Colors.DarkestBlue,
-    textTransform: "uppercase",
-    letterSpacing: 2,
   },
   textBanner: {
     textAlign: "center",
@@ -280,4 +302,29 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
     color: Colors.White,
   },
+  socials: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    height: 100,
+    marginTop: 50,
+    marginBottom: 20,
+  },
+  header: {
+    fontSize: 12,
+    fontFamily: "Poppins-SemiBold",
+    color: Colors.Peach,
+    textTransform: "uppercase",
+    letterSpacing: 2,
+  },
+  apps: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+  icons: {
+    padding: 20,
+    color: Colors.DarkestBlue
+  }
 });
