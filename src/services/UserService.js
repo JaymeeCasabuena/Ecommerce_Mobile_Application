@@ -9,7 +9,7 @@ const handleLogin = (email, password) => {
   };
 
   return axios
-    .post("http://10.0.2.2:8000/login", user)
+    .post("http://10.0.2.2:8000/auth/login", user)
     .then((response) => {
       const token = response.data.token;
       AsyncStorage.setItem("authToken", token);
@@ -28,7 +28,7 @@ const handleRegister = (userName, email, password) => {
   };
 
   axios
-    .post("http://10.0.2.2:8000/register", user, { withCredentials: true })
+    .post("http://10.0.2.2:8000/auth/register", user, { withCredentials: true })
     .then((response) => {
       Alert.alert(
         "Registration successful",
@@ -42,11 +42,10 @@ const handleRegister = (userName, email, password) => {
 };
 
 const fetchUserProfile = async (userId) => {
-
   try {
     const response = await axios.get(
-      `http://10.0.2.2:8000/profile/${userId}`
-    );
+      `http://10.0.2.2:8000/users/profile/${userId}`
+    ); // Updated endpoint
     return response.data.userProfile;
   } catch (error) {
     console.log("error fetching user data", error);
@@ -61,12 +60,19 @@ const handleProfileUpdate = (userId, userName, password) => {
   };
 
   axios
-    .post("http://10.0.2.2:8000/updateProfile", userUpdatedData)
+    .post("http://10.0.2.2:8000/users/updateProfile", userUpdatedData)
     .then((response) => {
-      return response
+      Alert.alert(
+        "Profile Update",
+        "Your profile has been updated successfully"
+      );
+      return response;
     })
     .catch((err) => {
-      Alert.alert("Update Error", "An error occurred while updating user profile");
+      Alert.alert(
+        "Update Error",
+        "An error occurred while updating user profile"
+      );
       console.log("Update failed", err);
     });
 };

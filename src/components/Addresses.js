@@ -50,7 +50,7 @@ const SelectDefaultAddress = () => {
     if (item != selectAddress) dispatch(setDefaultAddress(item));
   };
 
-  return addresses?.length > 0 ? (
+  return (
     <View style={styles.scrollView}>
       <FlatList
         data={addresses?.sort(
@@ -111,22 +111,6 @@ const SelectDefaultAddress = () => {
         <Text style={styles.addressDetails}>Add a new address</Text>
       </TouchableOpacity>
     </View>
-  ) : (
-    <View style={styles.scrollView}>
-      <Text style={styles.header}>No saved address yet</Text>
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => goToAddAddress()}
-      >
-        <Feather
-          style={styles.icons}
-          name="plus"
-          size={20}
-          color={Colors.PurplishBlue}
-        />
-        <Text style={styles.addressDetails}>Add a new address</Text>
-      </TouchableOpacity>
-    </View>
   );
 };
 
@@ -138,14 +122,6 @@ const styles = StyleSheet.create({
     width: 350,
     height: 240,
     backgroundColor: Colors.White,
-  },
-  header: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 25,
-    color: Colors.Black,
-    marginLeft: 30,
-    marginTop: 30,
-    marginBottom: 120,
   },
   addressButton: {
     flexDirection: "row",

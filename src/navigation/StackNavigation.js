@@ -195,7 +195,7 @@ const StackNavigator = () => {
           component={OrdersScreen}
           options={{
             headerShown: true,
-            headerTitle: "Check out",
+            headerTitle: "Order History",
             headerStyle: {
               backgroundColor: Colors.DarkestBlue,
             },

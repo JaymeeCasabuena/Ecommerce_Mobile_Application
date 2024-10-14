@@ -4,8 +4,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { useCallback } from "react";
 import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { store, persistor } from "./src/redux/Store";
+import { store } from "./src/redux/Store";
 import StackNavigator from "./src/navigation/StackNavigation";
 
 export default function App() {
@@ -23,7 +22,7 @@ export default function App() {
 
   const handleOnLayout = useCallback(async () => {
     if (fontsLoaded) {
-      await SplashScreen.hideAsync();
+      await SplashScreen.hideAsync(); 
     }
   }, [fontsLoaded]);
 
@@ -33,9 +32,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <StackNavigator />
-      </PersistGate>
+      <StackNavigator />
     </Provider>
   );
 }
