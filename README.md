@@ -1,4 +1,4 @@
-# Fake Store - Final Submission
+# Ecommerce Mobile Application Mobile Application Development Final Assignment
 
 **Note:** This project is currently under construction. I am performing a design and code review to ensure that best practices are applied throughout the application.
 
