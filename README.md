@@ -1,5 +1,7 @@
 # Fake Store - Final Submission
 
+**Note:** This project is currently under construction. I am performing a design and code review to ensure that best practices are applied throughout the application.
+
 ## Overview
 
 The "Fake Store" is a mobile application developed using React Native, integrating with both the [fakestoreapi](https://fakestoreapi.com) website and a custom-built Fake Store API server. The application simulates a comprehensive online shopping experience, featuring various functionalities as outlined in the assignment specifications.
